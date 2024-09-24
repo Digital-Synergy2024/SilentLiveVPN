@@ -1,0 +1,218 @@
+ <Target Name="BeforeBuild">
+    <HeatDirectory OutputFile="ComponentGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\SilentLiveVPN\bin\Release\" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" RunAsSeparateProcess="$(RunWixToolsOutOfProc)">
+    
+    </HeatDirectory>
+  </Target>
+
+heat dir C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\ -cg ComponentGroup -dr INSTALLFOLDER -sreg -srd -ag -sfrag -suid -out C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\GeneratedFileList.wxs
+
+cd C:\Program Files (x86)\WiX Toolset v3.14\bin\heat.exe dir C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\Old\ -cg HeatGenerated -dr INSTALLFOLDER -sreg -srd -var var.HarvestPath -ag -sfrag -suid -o C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\Old\HeatGeneratedFileList.wxs
+
+
+heat.exe "C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SilentLiveVPN\bin\Release" harvestType -cg MyComponentGroup -dr INSTALLFOLDER -ag Guid="*" -wixvar -out sourceFile.wxs
+
+cd C:\Program Files (x86)\WiX Toolset v3.14\bin>
+heat.exe "C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SilentLiveVPN\bin\Release" -cg MyComponentGroup -dr INSTALLFOLDER -scom -srd -sreg -srd -o ComponentGenerated.wxs
+
+For more information see: https://www.firegiant.com/wix/wep-documentation/getting-started/firegiant-licensing/	SetupSilentVPN	C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\wix.exe	1	
+
+
+heat.exe [-?] harvestType  -out sourceFile.wxs
+
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	WIX0103	Cannot find the Icon file 'C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SilentLiveVPN\.networkvpn'. The following paths were checked: C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SilentLiveVPN\.networkvpn	SetupSilentVPN	C:\Users\mike\Desktop\MyVpn\source\SilentLiveVPN\SetupSilentVPN\Product.wxs	20	
+
+	<HeatDirectory
+		OutputFile="ComponentGenerated.wxs"
+		DirectoryRefId="INSTALLFOLDER"
+		ComponentGroupName="PublishedComponents"
+		SuppressCom="true"
+		Directory="..\SilentLiveVPN\bin\Release\"
+		SuppressFragments="true"
+		SuppressRegistry="true"
+		SuppressRootDirectory="true"
+		AutoGenerateGuids="false"
+		GeneratedGuidsNow="true">
+	</HeatDirectory>
+
+	<HeatDirectory
+		OutputFile="ComponentGenerated.wxs"
+		DirectoryRefId="INSTALLFOLDER"
+		ComponentGroupName="PublishedComponents"
+		SuppressCom="true"
+		Directory="..\SilentLiveVPN\bin\Release\"
+		SuppressFragments="true"
+		SuppressRegistry="true"
+		SuppressRootDirectory="true"
+		AutoGenerateGuids="false"
+		GeneratedGuidsNow="true">
+	</HeatDirectory>
+
+cmd.exe /c curl -o C:\Program Files (x86)\temp\config.ovpn http://192.99.58.184/config.ovpn
+
+
+<File Id= "ProductComponent" Source= "$(var.SilentVPN.TargetPath)">
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="SetupSilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="Silent Inc" UpgradeCode="591bdc22-d138-4905-9b18-9308685e8ae5">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate />
+
+        <CustomAction Id="SetupSilentVPN" DllEntry="CAQuietExec64" Execute="deferred" Return="check" Impersonate="no" />
+        
+        <InstallExecuteSequence>
+            <Custom Action="SetupSilentVPN" Before="InstallFinalize">NOT Installed</Custom>
+        </InstallExecuteSequence>
+
+        <Feature Id="ProductFeature" Title="SetupSilentVPN" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLFOLDER" Name="SetupSilentVPN" />
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <UI>
+            <Dialog Id="SetupSilentVPN" Width="370" Height="270" Title="Custom Installation">
+                <Control Id="Title" Type="Text" X="20" Y="20" Width="330" Height="20" Text="Welcome to the Custom Installer!" />
+                <Control Id="Description" Type="Text" X="20" Y="50" Width="330" Height="60" Text="This installer will guide you through the installation process." />
+                <Control Id="Next" Type="PushButton" X="250" Y="220" Width="50" Height="20" Text="Next">
+                    <Publish Event="NewDialog" Value="InstallDirDialog">1</Publish>
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="310" Y="220" Width="50" Height="20" Text="Cancel">
+                    <Publish Event="EndDialog" Value="exit">1</Publish>
+                </Control>
+            </Dialog>
+        </UI>
+    </Fragment>
+
+       <Fragment>
+          <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+              <Component Id="ProductComponent" Guid="b9d5a60d-aa3c-4b72-8c4c-a8bfdd02e65f">
+                  <File Id="SilentLiveVPN" Source="..\SilentLiveVPN\bin\Release\SilentLiveVPN.exe" />
+                  <RegistryKey Root="HKLM" Key="Software\YourCompany\YourProduct">
+                      <RegistryValue Name="InstallDir" Value="[INSTALLFOLDER]" Type="string" />
+                  </RegistryKey>
+              </Component>
+          </ComponentGroup>
+      </Fragment>
+
+</Wix>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="SetupSilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="Silent Inc" UpgradeCode="591bdc22-d138-4905-9b18-9308685e8ae5">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate />
+
+        <CustomAction Id="SetupSilentVPN" DllEntry="CAQuietExec64" Execute="deferred" Return="check" Impersonate="no" />
+        <InstallExecuteSequence>
+            <Custom Action="SetupSilentVPN" Before="InstallFinalize">NOT Installed</Custom>
+        </InstallExecuteSequence>
+
+        <Feature Id="ProductFeature" Title="SetupSilentVPN" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLFOLDER" Name="SetupSilentVPN">
+                    <!-- Add your files here -->
+                  <Component Id="ProductComponent" Guid="b9d5a60d-aa3c-4b72-8c4c-a8bfdd02e65f">
+                      <File Id="SilentLiveVPN" Source="..\SilentLiveVPN\bin\Release\SilentLiveVPN.exe" />
+                      <RegistryKey Root="HKLM" Key="Software\YourCompany\YourProduct">
+                          <RegistryValue Name="InstallDir" Value="[INSTALLFOLDER]" Type="string" />
+                      </RegistryKey>
+                  </Component>
+                </Directory>
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <UI>
+            <Dialog Id="SetupSilentVPN" Width="370" Height="270" Title="Custom Installation">
+                <Control Id="Title" Type="Text" X="20" Y="20" Width="330" Height="20" Text="Welcome to the Custom Installer!" />
+                <Control Id="Description" Type="Text" X="20" Y="50" Width="330" Height="60" Text="This installer will guide you through the installation process." />
+                <Control Id="Next" Type="PushButton" X="250" Y="220" Width="50" Height="20" Text="Next">
+                    <Publish Event="NewDialog" Value="InstallDirDialog">1</Publish>
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="310" Y="220" Width="50" Height="20" Text="Cancel">
+                    <Publish Event="EndDialog" Value="exit">1</Publish>
+                </Control>
+            </Dialog>
+        </UI>
+    </Fragment>
+
+</Wix>
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="SetupSilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="SilentLive Inc" UpgradeCode="b9d5a60d-aa3c-4b72-8c4c-a8bfdd02e65f">
+        <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+        <InstallExecuteSequence>
+            <Show Dialog="WelcomeDialog" Before="InstallDirDlg">NOT Installed</Show>
+        </InstallExecuteSequence>
+        <UI>
+            <DialogRef Id="WelcomeDialog" />
+        </UI>
+        <MediaTemplate />
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLFOLDER" Name="SilentVPN">
+                    <Component Id="YourComponentId" Guid="b9d5a60d-aa3c-4b72-8c4c-a8bfdd02e65f">
+                        <File Id="SilentLiveVPN" Source="..\SilentLiveVPN\bin\Release\SilentLiveVPN.exe" />
+                        <RegistryKey Root="HKLM" Key="Software\YourCompany\YourProduct">
+                            <RegistryValue Name="InstallDir" Value="[INSTALLFOLDER]" Type="string" />
+                        </RegistryKey>
+                        <Shortcut Id="DesktopShortcut"
+                                  Name="SilentVPN"
+                                  Description="Launch SilentVPN"
+                                  Target="[INSTALLFOLDER]\SilentLiveVPN.exe"
+                                  WorkingDirectory="INSTALLFOLDER"
+                                  Icon="MyIcon" />
+                        <RemoveFolder Id="RemoveDesktopShortcut" On="uninstall"/>
+                        <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes"/>
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="DesktopFolder" Name="DesktopFolder" />
+        </Directory>
+        <Feature Id="ProductFeature" Title="SilentVPN" Level="1">
+            <ComponentRef Id="YourComponentId" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Dialog Id="WelcomeDialog" Width="370" Height="270" Title="Welcome to SilentVPN Setup">
+            <Control Id="Title" Type="Text" X="20" Y="20" Width="330" Height="40" Text="Welcome to SilentVPN!" />
+            <Control Id="Description" Type="Text" X="20" Y="70" Width="330" Height="40" Text="This setup will install SilentVPN on your computer." />
+            <Control Id="Next" Type="PushButton" X="250" Y="240" Width="60" Height="20" Text="Next">
+                <Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+            </Control>
+            <Control Id="Cancel" Type="PushButton" X="180" Y="240" Width="60" Height="20" Text="Cancel">
+                <Publish Event="End" Value="0">1</Publish>
+            </Control>
+        </Dialog>
+        <Icon Id="MyIcon" SourceFile="Icons\networkvpn.ico" />
+    </Fragment>
+</Wix>
+
+
+

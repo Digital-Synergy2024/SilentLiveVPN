@@ -1,0 +1,149 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:hbt="http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools"  xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/Util"><?define SilentLiveVPN_TargetDir=$(var.SilentLiveVPN.TargetDir)?><?define MyCustomActions_TargetDir=$(var.MyCustomActions.TargetDir)?>
+	<Package Name="SilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="SilentLIve Inc" UpgradeCode="d6328386-6d10-45e2-889d-7df9f36d066e" InstallerVersion="500" Compressed="yes" ProductCode="EEC885A5-6866-4EA2-9BA1-D141DEE00EE3">
+		
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<UIRef Id="WixUI_ErrorProgressText" />
+		<Feature Id="ProductFeature" Title="SilentVPN" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcut" />
+			<ComponentRef Id="DesktopFolderShortcut" />
+			<ComponentGroupRef Id="ComponentGroup" />
+		</Feature>
+
+		<ui:WixUI Id="WixUI_Minimal"/>
+		<WixVariable Id="SetupDialogUI" Value="1" />
+		<!--ui:WixUI Id="WixUI_InstallDir"  InstallDirectory="INSTALLFOLDER" /-->
+
+		<WixVariable Id="WixUIBannerBmp" Value="Images\RedBanner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="Images\background.bmp" />
+
+
+		<Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product." />
+		<Property Id="INSTALLDIR" Value="[INSTALLFOLDER]" />
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+		<Icon Id="icon.ico" SourceFile="$(var.SilentLiveVPN.ProjectDir)networkvpn.ico"/>
+		<Property Id="APPPRODUCTION" Value="icon.ico"/>
+		<Property Id="APPURLINFOABOUT" Value="https://silentlive.net/VPN"/>
+		<Property Id="MsiLogging" Value="voicewarmupx!"/>
+	</Package>
+	
+	
+	<Fragment>
+		
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="D1583E0B-AE4B-47B0-A0E8-C3917C1C1841">
+				<Shortcut Id="ApplicationStartMenuShortCut" Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER" />
+				
+				<Shortcut Id="UninstallProduct"
+                          Name="Uninstall SilentVPN"
+                          Description="Uninstalls My SilentVPN"
+                          Target="[System64Folder]msiexec.exe"
+                          Arguments="/x [ProductCode]"/>
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>					
+				<!--RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall" /-->
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</DirectoryRef>
+
+		<StandardDirectory Id="DesktopFolder">
+			<Component Id="DesktopFolderShortcut" Guid="84442CA0-9F06-48CF-B0F3-81B57FE10195">
+				<Shortcut Id="DesktopShortCut" Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER" />
+				
+				<Shortcut Id="UninstallDesktop"
+                          Name="Uninstall SilentVPN"
+                          Description="Uninstalls My SilentVPN"
+                          Target="[System64Folder]msiexec.exe"
+                          Arguments="/x [ProductCode]"/>
+                <RemoveFolder Id="DesktopFolder" On="uninstall"/>				
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</StandardDirectory>
+	
+			<StandardDirectory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="SilentVPN" />
+			</StandardDirectory>
+		
+			<StandardDirectory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="SilentVPN" />
+			</StandardDirectory>
+		</Fragment>
+
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="ProductComponent" Guid="94C623C2-8AD8-4ACA-B08C-8045A6AAD33E">
+				<File Id="ProductComponent" Source="$(var.SilentLiveVPN.TargetPath)" />
+				<Shortcut Id="Uninstall"
+                          Name="Uninstall SilentVPN"
+                          Description="Uninstalls My SilentVPN"
+                          Target="[System64Folder]msiexec.exe"
+                          Arguments="/x [ProductCode]"/>
+			  <RemoveFolder Id="ProgramFilesFolder" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>	
+		</ComponentGroup>
+		
+		<!-- Uninstall folder -->
+		<CustomAction Id="RemoveMySubFolder" Directory="INSTALLFOLDER" ExeCommand="RemoveFolderEx" Return="check" PatchUninstall="true" />
+
+		<!--Extracing file solution found from here https://stackoverflow.com/questions/11233267/how-to-pass-customactiondata-to-a-customaction-using-wix/11233268#11233268 -->
+		<CustomAction Id="CustomAction1" Property="CustomAction2" Value="ZIPFILEPATH=[INSTALLFOLDER]SilentVPN\" />
+		<CustomAction Id="MSBuildLogP" Property="LogDialog2" Value="LOGFILEPATH=\" />
+		<Binary Id="SomeIdForYourBinary" SourceFile="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />		
+		<CustomAction Id="LogDialog2" DllEntry="ShowLog" Execute="deferred" Return="check" Impersonate="no" HideTarget="no" BinaryRef="SomeIdForYourBinary" />
+		<CustomAction Id="CustomAction2" DllEntry="ExtractZipFile" Execute="deferred" Return="check" Impersonate="no" HideTarget="no" BinaryRef="SomeIdForYourBinary" />
+		<CustomAction Id="ExtractFiles" Directory="INSTALLFOLDER" ExeCommand="&quot;C:\Program Files\WinRAR\WinRAR.exe&quot; x &quot;[INSTALLFOLDER]skin.zip&quot; &quot;[INSTALLFOLDER]&quot;" Return="check" Execute="deferred" Impersonate="no"/>
+
+		<!-- Download OVN Config File -->
+		<CustomAction Id="DownloadFile"
+              Directory="ProgramFilesFolder"
+              ExeCommand="cmd.exe /c curl -o [INSTALLFOLDER]\config.ovpn http://192.99.58.184/config.ovpn"
+              Execute="deferred"
+              Return="check" />
+		
+		<!--Component Id="DownloadFileComponent" Guid="6AD76A8F-E960-4491-ABFD-A00D73F2069D">
+			<File Id="DownloadedFile" Source="http://192.99.58.184/config.ovpn" />
+		</Component-->
+
+		<!--InstallExecuteSequence>
+			<Custom Action="DownloadFile" After="InstallFiles" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+		
+		<!--Schedule the execution of the custom actions in the install sequence.-->
+		<!--InstallExecuteSequence>
+			<Custom Action="CustomAction1" Before="CustomAction2" />
+			<Custom Action="CustomAction2" Before="InstallFinalize" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+
+		<!--InstallExecuteSequence>
+			<Custom Action="ExtractFiles" After="InstallFiles" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+		
+		<InstallExecuteSequence>
+			<Custom Action="RemoveMySubFolder" After="InstallFinalize" Condition="uninstall" />		
+		</InstallExecuteSequence>
+
+		<!--CustomAction Id="CopyLogFile" Execute="immediate"
+			  ExeCommand="cmd /c copy [MsiLogFileLocation] [INSTALLFOLDER]\install.log\npause"
+			  Directory="ProgramFilesFolder"					  				
+			  Impersonate="no"
+			  Return="asyncNoWait" />
+
+		<InstallExecuteSequence>
+			<Custom Action="CopyLogFile" Before="InstallFinalize" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+
+		<!--InstallExecuteSequence>
+			<Custom Action="MSBuildLogP" Before="LogDialog2" Condition="NOT Installed"/>
+			<Custom Action="LogDialog2" After="InstallFiles" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+		
+		<!--InstallExecuteSequence>
+			<Custom Action="LogInstall" Before="InstallFinalize" Condition="NOT Installed" />
+		</InstallExecuteSequence-->
+
+	</Fragment>
+</Wix>

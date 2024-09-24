@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="SilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="SilentLIve Inc" UpgradeCode="d6328386-6d10-45e2-889d-7df9f36d066e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="SilentVPN" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcut" />
+			<ComponentRef Id="DesktopFolderShortcut" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="SilentVPN" />
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="SilentVPN" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop">
+				
+			</Directory> 
+		</Directory>
+		
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="52E26777-C12D-4AF1-91BF-B918B6034850">
+				<Shortcut Id="ApplicationStartMenuShortCut"  Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER"/>
+				<RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="DesktopFolderShortcut" Guid="87E05168-8F8E-4BC3-B7FD-6E21DF66D997">
+				<Shortcut Id="DesktopShortCut"  Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER"/>				
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</DirectoryRef>
+		
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id ="ProductComponent">
+
+				<File Id= "ProductComponent" Source= "$(var.SilentLiveVPN.TargetPath)"/>
+			</Component>
+			
+				<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+</Wix>

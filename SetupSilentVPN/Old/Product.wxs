@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define SilentLiveVPN_TargetDir=$(var.SilentLiveVPN.TargetDir)?><?define MyCustomActions_TargetDir=$(var.MyCustomActions.TargetDir)?>
+	<Product Id="*" Name="SilentVPN" Language="1033" Version="1.0.0.0" Manufacturer="SilentLIve Inc" UpgradeCode="d6328386-6d10-45e2-889d-7df9f36d066e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+		<UIRef Id="WixUI_ErrorProgressText" />
+    <!--Binary Id="MyCustomActions" SourceFile="..\MyCustomActions\bin\Release\MyCustomActions.dll" />-->
+      		
+
+		
+		<Feature Id="ProductFeature" Title="SilentVPN" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcut" />
+			<ComponentRef Id="DesktopFolderShortcut" />
+		</Feature>
+				
+		<Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product." />
+
+		<WixVariable Id="WixUILicenseRtf" Value="Test.txt" />
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="SilentVPN" />
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="SilentVPN" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop">
+				
+			</Directory> 
+		</Directory>
+		
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="52E26777-C12D-4AF1-91BF-B918B6034850">
+				<Shortcut Id="ApplicationStartMenuShortCut" Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="DesktopFolderShortcut" Guid="87E05168-8F8E-4BC3-B7FD-6E21DF66D997">
+				<Shortcut Id="DesktopShortCut" Name="SilentVPN" Target="[#ProductComponent]" WorkingDirectory="INSTALLFOLDER" />				
+				<RegistryValue Root="HKCU" Key="SoftWare\SilentVPN" KeyPath="yes" Type="integer" Value="1" Name="SIlentVpn"></RegistryValue>
+			</Component>
+		</DirectoryRef>
+
+ 
+		<!--
+		 <Fragment>
+    <Binary Id="MyCustomActions.CA.dll" SourceFile="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />
+	<CustomAction Id="MyCustomActions" BinaryKey="MyCustomActions.CA.dll" DllEntry="ExtractZipFile" Execute="deferred" Return="check" Impersonate="no" />
+ </Fragment>
+ 
+ Before="InstallFinalize">NOT Installed</Custom>
+ 
+ 	<Binary Id="MyCustomActions" SourceFile="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />
+ 
+<CustomAction Id="ExtractZipFile" BinaryKey="MyCustomActions" DllEntry="ExtractZipFile" Execute="deferred" Return="check" Impersonate="no"/>
+				<CustomAction Id="ExtractZipFile" BinaryKey="MyCustomActions" DllEntry="ExtractZipFile" Return="check"/>
+		<Custom Action="MyCustomActions" After="InstallFiles">NOT Installed</Custom>
+			CustomAction Id="MyCustomActions" BinaryKey="MyCustomActions" DllEntry="ExtractZipFile" Execute="deferred" Return="check" />-->
+
+	</Fragment>
+  
+
+
+
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="ProductComponent">
+
+				<File Id="ProductComponent" Source="$(var.SilentLiveVPN.TargetPath)" />
+			</Component>
+
+				<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+
+
+			<!-- </Component> -->
+
+
+			<!--Component Id="SilentLiveVPN.exe" Guid="b02fc2b0-6206-4266-a015-84a2681ac01d">
+			  <File Id="SilentLiveVPN.exe" Name="SilentLiveVPN.exe" Source="$(var.SilentLiveVPN_TargetDir)SilentLiveVPN.exe" />
+			</Component>-->
+			<!--Component Id="DevExpress.Data.v18.1.dll" Guid="52a7d877-335d-49c7-ae81-071440271177">
+			  <File Id="DevExpress.Data.v18.1.dll" Name="DevExpress.Data.v18.1.dll" Source="$(var.SilentLiveVPN_TargetDir)DevExpress.Data.v18.1.dll" />
+			</Component>
+			<Component Id="skin.zip" Guid="C7059B92-F230-45F6-8506-A5073F0F5D75">
+					<File Id="skin.zip" Source="$(var.SilentLiveVPN_TargetDir)skin.zip" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Shim.dll" Guid="612a5686-1d30-446c-8e59-d1f154b8a451">
+			  <File Id="System.Shim.dll" Name="System.Shim.dll" Source="$(var.MyCustomActions_TargetDir)System.Shim.dll" />
+			</Component>
+			<Component Id="System.IO.Compression.FileSystem.dll" Guid="36b7cf68-38bb-46ca-905f-0eaa8064f783">
+			  <File Id="System.IO.Compression.FileSystem.dll" Name="System.IO.Compression.FileSystem.dll" Source="$(var.MyCustomActions_TargetDir)System.IO.Compression.FileSystem.dll" />
+			</Component>
+			<Component Id="Microsoft.Deployment.WindowsInstaller.dll" Guid="2ce41aaa-e15d-4966-83e2-a03a7b1efcb9">
+			  <File Id="Microsoft.Deployment.WindowsInstaller.dll" Name="Microsoft.Deployment.WindowsInstaller.dll" Source="$(var.MyCustomActions_TargetDir)Microsoft.Deployment.WindowsInstaller.dll" />
+			</Component>
+			<Component Id="System.IO.Compression.dll" Guid="9B1B5AEB-89F0-4004-B46D-96D1D48B0642">
+			  <File Id="System.IO.Compression.dll" Name="System.IO.Compression.dll" Source="$(var.MyCustomActions_TargetDir)System.IO.Compression.dll" />
+			</Component>
+			<Component Id="MyCustomActions.CA.dll" Guid="56aa9dfc-5e2a-46cf-acf6-a45e5132be9f">
+			  <File Id="MyCustomActions.CA.dll" Name="MyCustomActions.CA.dll" Source="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />
+			</Component-->
+		</ComponentGroup>
+
+
+		<!--Extracing file solution found from here https://stackoverflow.com/questions/11233267/how-to-pass-customactiondata-to-a-customaction-using-wix/11233268#11233268 -->
+		<CustomAction Id="CustomAction1"
+              Property="CustomAction2"
+              Value="ZIPFILEPATH=[INSTALLFOLDER]SilentVPN\"
+		/>
+		
+		<Binary Id="SomeIdForYourBinary" SourceFile="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />
+		
+		<CustomAction Id="CustomAction2"
+              BinaryKey="SomeIdForYourBinary"
+              DllEntry="ExtractZipFile"
+              Execute="deferred"
+              Return="check"
+			  Impersonate="no"
+              HideTarget="no"
+		/>
+		
+		<InstallExecuteSequence>
+			<!--Schedule the execution of the custom actions in the install sequence.-->
+			<Custom Action="CustomAction1" Before="CustomAction2" />
+			<Custom Action="CustomAction2" Before="InstallFinalize">NOT Installed</Custom>    
+		</InstallExecuteSequence>
+
+
+		<!--Binary Id="MyCustomActions" SourceFile="$(var.MyCustomActions_TargetDir)MyCustomActions.CA.dll" />
+		<CustomAction Id="SetCustomActionData" Property="CustomActionData" Value="/ZIPFILEPATH=[INSTALLFOLDER]SilentVPN\skin.zip /EXTRACTPATH=[INSTALLFOLDER]SilentVPN\" />
+		
+		<CustomAction Id="ExtractZipFile" BinaryKey="MyCustomActions" DllEntry="ExtractZipFile" Execute="deferred" Return="check" Impersonate="no"/>
+		<InstallExecuteSequence>
+			<Custom Action="ExtractZipFile"	Before="InstallFiles">NOT Installed</Custom>
+		</InstallExecuteSequence>-->
+
+
+
+	</Fragment>
+</Wix>

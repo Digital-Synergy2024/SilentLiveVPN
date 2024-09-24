@@ -1,0 +1,1071 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLFOLDER">
+            <Component Id="Heat.bat" Guid="*">
+                <File Id="Heat.bat" KeyPath="yes" Source="SourceDir\Heat.bat" />
+            </Component>
+            <Component Id="networkvpn.ico" Guid="*">
+                <File Id="networkvpn.ico" KeyPath="yes" Source="SourceDir\networkvpn.ico" />
+            </Component>
+            <Component Id="packages.config" Guid="*">
+                <File Id="packages.config" KeyPath="yes" Source="SourceDir\packages.config" />
+            </Component>
+            <Component Id="Product_backup.txt" Guid="*">
+                <File Id="Product_backup.txt" KeyPath="yes" Source="SourceDir\Product backup.txt" />
+            </Component>
+            <Component Id="Product.wxs" Guid="*">
+                <File Id="Product.wxs" KeyPath="yes" Source="SourceDir\Product.wxs" />
+            </Component>
+            <Component Id="run.bat" Guid="*">
+                <File Id="run.bat" KeyPath="yes" Source="SourceDir\run.bat" />
+            </Component>
+            <Component Id="SetupSilentVPN.wax" Guid="*">
+                <File Id="SetupSilentVPN.wax" KeyPath="yes" Source="SourceDir\SetupSilentVPN.wax" />
+            </Component>
+            <Component Id="SetupSilentVPN_Old.wixproj" Guid="*">
+                <File Id="SetupSilentVPN_Old.wixproj" KeyPath="yes" Source="SourceDir\SetupSilentVPN_Old.wixproj" />
+            </Component>
+            <Component Id="Test.txt" Guid="*">
+                <File Id="Test.txt" KeyPath="yes" Source="SourceDir\Test.txt" />
+            </Component>
+            <Directory Id="bin" Name="bin">
+                <Directory Id="Release" Name="Release">
+                    <Component Id="install.log" Guid="*">
+                        <File Id="install.log" KeyPath="yes" Source="SourceDir\bin\Release\install.log" />
+                    </Component>
+                    <Component Id="Setup.bat" Guid="*">
+                        <File Id="Setup.bat" KeyPath="yes" Source="SourceDir\bin\Release\Setup.bat" />
+                    </Component>
+                    <Component Id="SilentVPN.msi" Guid="*">
+                        <File Id="SilentVPN.msi" KeyPath="yes" Source="SourceDir\bin\Release\SilentVPN.msi" />
+                    </Component>
+                    <Component Id="System.IO.Compression.dll" Guid="*">
+                        <File Id="System.IO.Compression.dll" KeyPath="yes" Source="SourceDir\bin\Release\System.IO.Compression.dll" />
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="Icons" Name="Icons">
+                <Component Id="networkvpn.ico_1" Guid="*">
+                    <File Id="networkvpn.ico_1" KeyPath="yes" Source="SourceDir\Icons\networkvpn.ico" />
+                </Component>
+            </Directory>
+            <Directory Id="obj" Name="obj">
+                <Directory Id="Release_1" Name="Release">
+                    <Component Id="Product.wixobj" Guid="*">
+                        <File Id="Product.wixobj" KeyPath="yes" Source="SourceDir\obj\Release\Product.wixobj" />
+                    </Component>
+                    <Component Id="SetupSilentVPN.wixproj.BindBuiltOutputsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN.wixproj.BindBuiltOutputsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN.wixproj.BindBuiltOutputsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN.wixproj.BindContentsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN.wixproj.BindContentsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN.wixproj.BindContentsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN.wixproj.BindOutputsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN.wixproj.BindOutputsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN.wixproj.BindOutputsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN.wixproj.FileList.txt" Guid="*">
+                        <File Id="SetupSilentVPN.wixproj.FileList.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN.wixproj.FileList.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN_Old.wixproj.BindBuiltOutputsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN_Old.wixproj.BindBuiltOutputsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN_Old.wixproj.BindBuiltOutputsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN_Old.wixproj.BindContentsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN_Old.wixproj.BindContentsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN_Old.wixproj.BindContentsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN_Old.wixproj.BindOutputsFileListnull.txt" Guid="*">
+                        <File Id="SetupSilentVPN_Old.wixproj.BindOutputsFileListnull.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN_Old.wixproj.BindOutputsFileListnull.txt" />
+                    </Component>
+                    <Component Id="SetupSilentVPN_Old.wixproj.FileList.txt" Guid="*">
+                        <File Id="SetupSilentVPN_Old.wixproj.FileList.txt" KeyPath="yes" Source="SourceDir\obj\Release\SetupSilentVPN_Old.wixproj.FileList.txt" />
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="packages" Name="packages">
+                <Directory Id="wix.3.14.1" Name="wix.3.14.1">
+                    <Component Id="_.signature.p7s" Guid="*">
+                        <File Id="_.signature.p7s" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\.signature.p7s" />
+                    </Component>
+                    <Component Id="wix.3.14.1.nupkg" Guid="*">
+                        <File Id="wix.3.14.1.nupkg" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\wix.3.14.1.nupkg" />
+                    </Component>
+                    <Component Id="wix.png" Guid="*">
+                        <File Id="wix.png" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\wix.png" />
+                    </Component>
+                    <Directory Id="build" Name="build">
+                        <Component Id="wix.props" Guid="*">
+                            <File Id="wix.props" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\build\wix.props" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="tools" Name="tools">
+                        <Component Id="candle.exe" Guid="*">
+                            <File Id="candle.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\candle.exe" />
+                        </Component>
+                        <Component Id="candle.exe.config" Guid="*">
+                            <File Id="candle.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\candle.exe.config" />
+                        </Component>
+                        <Component Id="darice.cub" Guid="*">
+                            <File Id="darice.cub" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\darice.cub" />
+                        </Component>
+                        <Component Id="dark.exe" Guid="*">
+                            <File Id="dark.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\dark.exe" />
+                        </Component>
+                        <Component Id="dark.exe.config" Guid="*">
+                            <File Id="dark.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\dark.exe.config" />
+                        </Component>
+                        <Component Id="difxapp_x64.wixlib" Guid="*">
+                            <File Id="difxapp_x64.wixlib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\difxapp_x64.wixlib" />
+                        </Component>
+                        <Component Id="difxapp_x86.wixlib" Guid="*">
+                            <File Id="difxapp_x86.wixlib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\difxapp_x86.wixlib" />
+                        </Component>
+                        <Component Id="heat.exe" Guid="*">
+                            <File Id="heat.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\heat.exe" />
+                        </Component>
+                        <Component Id="heat.exe.config" Guid="*">
+                            <File Id="heat.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\heat.exe.config" />
+                        </Component>
+                        <Component Id="insignia.exe" Guid="*">
+                            <File Id="insignia.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\insignia.exe" />
+                        </Component>
+                        <Component Id="insignia.exe.config" Guid="*">
+                            <File Id="insignia.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\insignia.exe.config" />
+                        </Component>
+                        <Component Id="LICENSE.TXT" Guid="*">
+                            <File Id="LICENSE.TXT" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\LICENSE.TXT" />
+                        </Component>
+                        <Component Id="light.exe" Guid="*">
+                            <File Id="light.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\light.exe" />
+                        </Component>
+                        <Component Id="light.exe.config" Guid="*">
+                            <File Id="light.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\light.exe.config" />
+                        </Component>
+                        <Component Id="lit.exe" Guid="*">
+                            <File Id="lit.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\lit.exe" />
+                        </Component>
+                        <Component Id="lit.exe.config" Guid="*">
+                            <File Id="lit.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\lit.exe.config" />
+                        </Component>
+                        <Component Id="lux.exe" Guid="*">
+                            <File Id="lux.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\lux.exe" />
+                        </Component>
+                        <Component Id="lux.exe.config" Guid="*">
+                            <File Id="lux.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\lux.exe.config" />
+                        </Component>
+                        <Component Id="lux.targets" Guid="*">
+                            <File Id="lux.targets" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\lux.targets" />
+                        </Component>
+                        <Component Id="LuxTasks.dll" Guid="*">
+                            <File Id="LuxTasks.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\LuxTasks.dll" />
+                        </Component>
+                        <Component Id="melt.exe" Guid="*">
+                            <File Id="melt.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\melt.exe" />
+                        </Component>
+                        <Component Id="melt.exe.config" Guid="*">
+                            <File Id="melt.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\melt.exe.config" />
+                        </Component>
+                        <Component Id="mergemod.cub" Guid="*">
+                            <File Id="mergemod.cub" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\mergemod.cub" />
+                        </Component>
+                        <Component Id="mergemod.dll" Guid="*">
+                            <File Id="mergemod.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\mergemod.dll" />
+                        </Component>
+                        <Component Id="Microsoft.Deployment.Compression.Cab.dll" Guid="*">
+                            <File Id="Microsoft.Deployment.Compression.Cab.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\Microsoft.Deployment.Compression.Cab.dll" />
+                        </Component>
+                        <Component Id="Microsoft.Deployment.Compression.dll" Guid="*">
+                            <File Id="Microsoft.Deployment.Compression.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\Microsoft.Deployment.Compression.dll" />
+                        </Component>
+                        <Component Id="Microsoft.Deployment.Resources.dll" Guid="*">
+                            <File Id="Microsoft.Deployment.Resources.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\Microsoft.Deployment.Resources.dll" />
+                        </Component>
+                        <Component Id="Microsoft.Deployment.WindowsInstaller.dll" Guid="*">
+                            <File Id="Microsoft.Deployment.WindowsInstaller.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\Microsoft.Deployment.WindowsInstaller.dll" />
+                        </Component>
+                        <Component Id="Microsoft.Deployment.WindowsInstaller.Package.dll" Guid="*">
+                            <File Id="Microsoft.Deployment.WindowsInstaller.Package.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\Microsoft.Deployment.WindowsInstaller.Package.dll" />
+                        </Component>
+                        <Component Id="mspatchc.dll" Guid="*">
+                            <File Id="mspatchc.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\mspatchc.dll" />
+                        </Component>
+                        <Component Id="nit.exe" Guid="*">
+                            <File Id="nit.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\nit.exe" />
+                        </Component>
+                        <Component Id="pyro.exe" Guid="*">
+                            <File Id="pyro.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\pyro.exe" />
+                        </Component>
+                        <Component Id="pyro.exe.config" Guid="*">
+                            <File Id="pyro.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\pyro.exe.config" />
+                        </Component>
+                        <Component Id="retina.exe" Guid="*">
+                            <File Id="retina.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\retina.exe" />
+                        </Component>
+                        <Component Id="retina.exe.config" Guid="*">
+                            <File Id="retina.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\retina.exe.config" />
+                        </Component>
+                        <Component Id="shine.exe" Guid="*">
+                            <File Id="shine.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\shine.exe" />
+                        </Component>
+                        <Component Id="shine.exe.config" Guid="*">
+                            <File Id="shine.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\shine.exe.config" />
+                        </Component>
+                        <Component Id="smoke.exe" Guid="*">
+                            <File Id="smoke.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\smoke.exe" />
+                        </Component>
+                        <Component Id="smoke.exe.config" Guid="*">
+                            <File Id="smoke.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\smoke.exe.config" />
+                        </Component>
+                        <Component Id="ThmViewer.exe" Guid="*">
+                            <File Id="ThmViewer.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\ThmViewer.exe" />
+                        </Component>
+                        <Component Id="torch.exe" Guid="*">
+                            <File Id="torch.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\torch.exe" />
+                        </Component>
+                        <Component Id="torch.exe.config" Guid="*">
+                            <File Id="torch.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\torch.exe.config" />
+                        </Component>
+                        <Component Id="wconsole.dll" Guid="*">
+                            <File Id="wconsole.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\wconsole.dll" />
+                        </Component>
+                        <Component Id="winterop.dll" Guid="*">
+                            <File Id="winterop.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\winterop.dll" />
+                        </Component>
+                        <Component Id="wix.dll" Guid="*">
+                            <File Id="wix.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\wix.dll" />
+                        </Component>
+                        <Component Id="wix.targets" Guid="*">
+                            <File Id="wix.targets" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\wix.targets" />
+                        </Component>
+                        <Component Id="WixBalExtension.dll" Guid="*">
+                            <File Id="WixBalExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixBalExtension.dll" />
+                        </Component>
+                        <Component Id="WixComPlusExtension.dll" Guid="*">
+                            <File Id="WixComPlusExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixComPlusExtension.dll" />
+                        </Component>
+                        <Component Id="WixCop.exe" Guid="*">
+                            <File Id="WixCop.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixCop.exe" />
+                        </Component>
+                        <Component Id="WixDependencyExtension.dll" Guid="*">
+                            <File Id="WixDependencyExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixDependencyExtension.dll" />
+                        </Component>
+                        <Component Id="WixDifxAppExtension.dll" Guid="*">
+                            <File Id="WixDifxAppExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixDifxAppExtension.dll" />
+                        </Component>
+                        <Component Id="WixDirectXExtension.dll" Guid="*">
+                            <File Id="WixDirectXExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixDirectXExtension.dll" />
+                        </Component>
+                        <Component Id="WixFirewallExtension.dll" Guid="*">
+                            <File Id="WixFirewallExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixFirewallExtension.dll" />
+                        </Component>
+                        <Component Id="WixGamingExtension.dll" Guid="*">
+                            <File Id="WixGamingExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixGamingExtension.dll" />
+                        </Component>
+                        <Component Id="WixHttpExtension.dll" Guid="*">
+                            <File Id="WixHttpExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixHttpExtension.dll" />
+                        </Component>
+                        <Component Id="WixIIsExtension.dll" Guid="*">
+                            <File Id="WixIIsExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixIIsExtension.dll" />
+                        </Component>
+                        <Component Id="WixLuxExtension.dll" Guid="*">
+                            <File Id="WixLuxExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixLuxExtension.dll" />
+                        </Component>
+                        <Component Id="WixMsmqExtension.dll" Guid="*">
+                            <File Id="WixMsmqExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixMsmqExtension.dll" />
+                        </Component>
+                        <Component Id="WixNetFxExtension.dll" Guid="*">
+                            <File Id="WixNetFxExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixNetFxExtension.dll" />
+                        </Component>
+                        <Component Id="WixPSExtension.dll" Guid="*">
+                            <File Id="WixPSExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixPSExtension.dll" />
+                        </Component>
+                        <Component Id="WixSqlExtension.dll" Guid="*">
+                            <File Id="WixSqlExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixSqlExtension.dll" />
+                        </Component>
+                        <Component Id="WixTagExtension.dll" Guid="*">
+                            <File Id="WixTagExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixTagExtension.dll" />
+                        </Component>
+                        <Component Id="WixTasks.dll" Guid="*">
+                            <File Id="WixTasks.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixTasks.dll" />
+                        </Component>
+                        <Component Id="WixUIExtension.dll" Guid="*">
+                            <File Id="WixUIExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixUIExtension.dll" />
+                        </Component>
+                        <Component Id="WixUtilExtension.dll" Guid="*">
+                            <File Id="WixUtilExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixUtilExtension.dll" />
+                        </Component>
+                        <Component Id="WixVSExtension.dll" Guid="*">
+                            <File Id="WixVSExtension.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixVSExtension.dll" />
+                        </Component>
+                        <Component Id="WixVSExtension.MSBuild12.dll" Guid="*">
+                            <File Id="WixVSExtension.MSBuild12.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixVSExtension.MSBuild12.dll" />
+                        </Component>
+                        <Component Id="WixVSExtension.MSBuild14.dll" Guid="*">
+                            <File Id="WixVSExtension.MSBuild14.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\WixVSExtension.MSBuild14.dll" />
+                        </Component>
+                        <Directory Id="doc" Name="doc">
+                            <Component Id="bal.xsd" Guid="*">
+                                <File Id="bal.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\bal.xsd" />
+                            </Component>
+                            <Component Id="complus.xsd" Guid="*">
+                                <File Id="complus.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\complus.xsd" />
+                            </Component>
+                            <Component Id="Dependency.xsd" Guid="*">
+                                <File Id="Dependency.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\Dependency.xsd" />
+                            </Component>
+                            <Component Id="difxapp.xsd" Guid="*">
+                                <File Id="difxapp.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\difxapp.xsd" />
+                            </Component>
+                            <Component Id="DTF.chm" Guid="*">
+                                <File Id="DTF.chm" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\DTF.chm" />
+                            </Component>
+                            <Component Id="DTFAPI.chm" Guid="*">
+                                <File Id="DTFAPI.chm" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\DTFAPI.chm" />
+                            </Component>
+                            <Component Id="firewall.xsd" Guid="*">
+                                <File Id="firewall.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\firewall.xsd" />
+                            </Component>
+                            <Component Id="gaming.xsd" Guid="*">
+                                <File Id="gaming.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\gaming.xsd" />
+                            </Component>
+                            <Component Id="http.xsd" Guid="*">
+                                <File Id="http.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\http.xsd" />
+                            </Component>
+                            <Component Id="iis.xsd" Guid="*">
+                                <File Id="iis.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\iis.xsd" />
+                            </Component>
+                            <Component Id="lux.xsd" Guid="*">
+                                <File Id="lux.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\lux.xsd" />
+                            </Component>
+                            <Component Id="msmq.xsd" Guid="*">
+                                <File Id="msmq.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\msmq.xsd" />
+                            </Component>
+                            <Component Id="netfx.xsd" Guid="*">
+                                <File Id="netfx.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\netfx.xsd" />
+                            </Component>
+                            <Component Id="ps.xsd" Guid="*">
+                                <File Id="ps.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\ps.xsd" />
+                            </Component>
+                            <Component Id="sql.xsd" Guid="*">
+                                <File Id="sql.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\sql.xsd" />
+                            </Component>
+                            <Component Id="tag.xsd" Guid="*">
+                                <File Id="tag.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\tag.xsd" />
+                            </Component>
+                            <Component Id="thmutil.xsd" Guid="*">
+                                <File Id="thmutil.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\thmutil.xsd" />
+                            </Component>
+                            <Component Id="util.xsd" Guid="*">
+                                <File Id="util.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\util.xsd" />
+                            </Component>
+                            <Component Id="vs.xsd" Guid="*">
+                                <File Id="vs.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\vs.xsd" />
+                            </Component>
+                            <Component Id="WiX.chm" Guid="*">
+                                <File Id="WiX.chm" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\WiX.chm" />
+                            </Component>
+                            <Component Id="wix.xsd" Guid="*">
+                                <File Id="wix.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\wix.xsd" />
+                            </Component>
+                            <Component Id="wixloc.xsd" Guid="*">
+                                <File Id="wixloc.xsd" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\doc\wixloc.xsd" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="sdk" Name="sdk">
+                            <Component Id="BootstrapperCore.config" Guid="*">
+                                <File Id="BootstrapperCore.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\BootstrapperCore.config" />
+                            </Component>
+                            <Component Id="BootstrapperCore.dll" Guid="*">
+                                <File Id="BootstrapperCore.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\BootstrapperCore.dll" />
+                            </Component>
+                            <Component Id="BootstrapperCore.xml" Guid="*">
+                                <File Id="BootstrapperCore.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\BootstrapperCore.xml" />
+                            </Component>
+                            <Component Id="DocCompiler.exe" Guid="*">
+                                <File Id="DocCompiler.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\DocCompiler.exe" />
+                            </Component>
+                            <Component Id="MakeSfxCA.exe" Guid="*">
+                                <File Id="MakeSfxCA.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\MakeSfxCA.exe" />
+                            </Component>
+                            <Component Id="MakeSfxCA.exe.config" Guid="*">
+                                <File Id="MakeSfxCA.exe.config" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\MakeSfxCA.exe.config" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.Cab.dll_1" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.Cab.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.Cab.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.Cab.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.Cab.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.Cab.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.dll_1" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.Zip.dll" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.Zip.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.Zip.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Compression.Zip.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.Compression.Zip.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Compression.Zip.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Resources.dll_1" Guid="*">
+                                <File Id="Microsoft.Deployment.Resources.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Resources.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.Resources.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.Resources.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.Resources.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.dll_1" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.Linq.dll" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.Linq.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.Linq.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.Linq.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.Linq.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.Linq.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.Package.dll_1" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.Package.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.Package.dll" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.Package.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.Package.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.Package.xml" />
+                            </Component>
+                            <Component Id="Microsoft.Deployment.WindowsInstaller.xml" Guid="*">
+                                <File Id="Microsoft.Deployment.WindowsInstaller.xml" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\Microsoft.Deployment.WindowsInstaller.xml" />
+                            </Component>
+                            <Component Id="MsgGen.exe" Guid="*">
+                                <File Id="MsgGen.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\MsgGen.exe" />
+                            </Component>
+                            <Component Id="wix.ca.targets" Guid="*">
+                                <File Id="wix.ca.targets" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\wix.ca.targets" />
+                            </Component>
+                            <Component Id="wix.nativeca.targets" Guid="*">
+                                <File Id="wix.nativeca.targets" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\wix.nativeca.targets" />
+                            </Component>
+                            <Component Id="XsdGen.exe" Guid="*">
+                                <File Id="XsdGen.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\XsdGen.exe" />
+                            </Component>
+                            <Component Id="XsdStitch.exe" Guid="*">
+                                <File Id="XsdStitch.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\XsdStitch.exe" />
+                            </Component>
+                            <Directory Id="inc" Name="inc">
+                                <Component Id="aclutil.h" Guid="*">
+                                    <File Id="aclutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\aclutil.h" />
+                                </Component>
+                                <Component Id="apputil.h" Guid="*">
+                                    <File Id="apputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\apputil.h" />
+                                </Component>
+                                <Component Id="apuputil.h" Guid="*">
+                                    <File Id="apuputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\apuputil.h" />
+                                </Component>
+                                <Component Id="atomutil.h" Guid="*">
+                                    <File Id="atomutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\atomutil.h" />
+                                </Component>
+                                <Component Id="BalBaseBootstrapperApplication.h" Guid="*">
+                                    <File Id="BalBaseBootstrapperApplication.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\BalBaseBootstrapperApplication.h" />
+                                </Component>
+                                <Component Id="balcondition.h" Guid="*">
+                                    <File Id="balcondition.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\balcondition.h" />
+                                </Component>
+                                <Component Id="balinfo.h" Guid="*">
+                                    <File Id="balinfo.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\balinfo.h" />
+                                </Component>
+                                <Component Id="balretry.h" Guid="*">
+                                    <File Id="balretry.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\balretry.h" />
+                                </Component>
+                                <Component Id="balutil.h" Guid="*">
+                                    <File Id="balutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\balutil.h" />
+                                </Component>
+                                <Component Id="buffutil.h" Guid="*">
+                                    <File Id="buffutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\buffutil.h" />
+                                </Component>
+                                <Component Id="butil.h" Guid="*">
+                                    <File Id="butil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\butil.h" />
+                                </Component>
+                                <Component Id="cabcutil.h" Guid="*">
+                                    <File Id="cabcutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\cabcutil.h" />
+                                </Component>
+                                <Component Id="cabutil.h" Guid="*">
+                                    <File Id="cabutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\cabutil.h" />
+                                </Component>
+                                <Component Id="certutil.h" Guid="*">
+                                    <File Id="certutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\certutil.h" />
+                                </Component>
+                                <Component Id="conutil.h" Guid="*">
+                                    <File Id="conutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\conutil.h" />
+                                </Component>
+                                <Component Id="cryputil.h" Guid="*">
+                                    <File Id="cryputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\cryputil.h" />
+                                </Component>
+                                <Component Id="custommsierrors.h" Guid="*">
+                                    <File Id="custommsierrors.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\custommsierrors.h" />
+                                </Component>
+                                <Component Id="deputil.h" Guid="*">
+                                    <File Id="deputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\deputil.h" />
+                                </Component>
+                                <Component Id="dictutil.h" Guid="*">
+                                    <File Id="dictutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\dictutil.h" />
+                                </Component>
+                                <Component Id="dirutil.h" Guid="*">
+                                    <File Id="dirutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\dirutil.h" />
+                                </Component>
+                                <Component Id="dlutil.h" Guid="*">
+                                    <File Id="dlutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\dlutil.h" />
+                                </Component>
+                                <Component Id="dutil.h" Guid="*">
+                                    <File Id="dutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\dutil.h" />
+                                </Component>
+                                <Component Id="eseutil.h" Guid="*">
+                                    <File Id="eseutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\eseutil.h" />
+                                </Component>
+                                <Component Id="fileutil.h" Guid="*">
+                                    <File Id="fileutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\fileutil.h" />
+                                </Component>
+                                <Component Id="gdiputil.h" Guid="*">
+                                    <File Id="gdiputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\gdiputil.h" />
+                                </Component>
+                                <Component Id="IBootstrapperApplication.h" Guid="*">
+                                    <File Id="IBootstrapperApplication.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\IBootstrapperApplication.h" />
+                                </Component>
+                                <Component Id="IBootstrapperBAFunction.h" Guid="*">
+                                    <File Id="IBootstrapperBAFunction.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\IBootstrapperBAFunction.h" />
+                                </Component>
+                                <Component Id="IBootstrapperEngine.h" Guid="*">
+                                    <File Id="IBootstrapperEngine.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\IBootstrapperEngine.h" />
+                                </Component>
+                                <Component Id="iis7util.h" Guid="*">
+                                    <File Id="iis7util.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\iis7util.h" />
+                                </Component>
+                                <Component Id="inetutil.h" Guid="*">
+                                    <File Id="inetutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\inetutil.h" />
+                                </Component>
+                                <Component Id="iniutil.h" Guid="*">
+                                    <File Id="iniutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\iniutil.h" />
+                                </Component>
+                                <Component Id="jsonutil.h" Guid="*">
+                                    <File Id="jsonutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\jsonutil.h" />
+                                </Component>
+                                <Component Id="locutil.h" Guid="*">
+                                    <File Id="locutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\locutil.h" />
+                                </Component>
+                                <Component Id="logutil.h" Guid="*">
+                                    <File Id="logutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\logutil.h" />
+                                </Component>
+                                <Component Id="memutil.h" Guid="*">
+                                    <File Id="memutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\memutil.h" />
+                                </Component>
+                                <Component Id="metautil.h" Guid="*">
+                                    <File Id="metautil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\metautil.h" />
+                                </Component>
+                                <Component Id="osutil.h" Guid="*">
+                                    <File Id="osutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\osutil.h" />
+                                </Component>
+                                <Component Id="pathutil.h" Guid="*">
+                                    <File Id="pathutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\pathutil.h" />
+                                </Component>
+                                <Component Id="perfutil.h" Guid="*">
+                                    <File Id="perfutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\perfutil.h" />
+                                </Component>
+                                <Component Id="polcutil.h" Guid="*">
+                                    <File Id="polcutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\polcutil.h" />
+                                </Component>
+                                <Component Id="procutil.h" Guid="*">
+                                    <File Id="procutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\procutil.h" />
+                                </Component>
+                                <Component Id="regutil.h" Guid="*">
+                                    <File Id="regutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\regutil.h" />
+                                </Component>
+                                <Component Id="resrutil.h" Guid="*">
+                                    <File Id="resrutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\resrutil.h" />
+                                </Component>
+                                <Component Id="reswutil.h" Guid="*">
+                                    <File Id="reswutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\reswutil.h" />
+                                </Component>
+                                <Component Id="rexutil.h" Guid="*">
+                                    <File Id="rexutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\rexutil.h" />
+                                </Component>
+                                <Component Id="rmutil.h" Guid="*">
+                                    <File Id="rmutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\rmutil.h" />
+                                </Component>
+                                <Component Id="rssutil.h" Guid="*">
+                                    <File Id="rssutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\rssutil.h" />
+                                </Component>
+                                <Component Id="sceutil.h" Guid="*">
+                                    <File Id="sceutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\sceutil.h" />
+                                </Component>
+                                <Component Id="shelutil.h" Guid="*">
+                                    <File Id="shelutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\shelutil.h" />
+                                </Component>
+                                <Component Id="sqlutil.h" Guid="*">
+                                    <File Id="sqlutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\sqlutil.h" />
+                                </Component>
+                                <Component Id="srputil.h" Guid="*">
+                                    <File Id="srputil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\srputil.h" />
+                                </Component>
+                                <Component Id="strutil.h" Guid="*">
+                                    <File Id="strutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\strutil.h" />
+                                </Component>
+                                <Component Id="svcutil.h" Guid="*">
+                                    <File Id="svcutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\svcutil.h" />
+                                </Component>
+                                <Component Id="thmutil.h" Guid="*">
+                                    <File Id="thmutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\thmutil.h" />
+                                </Component>
+                                <Component Id="timeutil.h" Guid="*">
+                                    <File Id="timeutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\timeutil.h" />
+                                </Component>
+                                <Component Id="uriutil.h" Guid="*">
+                                    <File Id="uriutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\uriutil.h" />
+                                </Component>
+                                <Component Id="userutil.h" Guid="*">
+                                    <File Id="userutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\userutil.h" />
+                                </Component>
+                                <Component Id="wcalog.h" Guid="*">
+                                    <File Id="wcalog.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wcalog.h" />
+                                </Component>
+                                <Component Id="wcautil.h" Guid="*">
+                                    <File Id="wcautil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wcautil.h" />
+                                </Component>
+                                <Component Id="wcawow64.h" Guid="*">
+                                    <File Id="wcawow64.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wcawow64.h" />
+                                </Component>
+                                <Component Id="wcawrapquery.h" Guid="*">
+                                    <File Id="wcawrapquery.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wcawrapquery.h" />
+                                </Component>
+                                <Component Id="wiutil.h" Guid="*">
+                                    <File Id="wiutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wiutil.h" />
+                                </Component>
+                                <Component Id="wuautil.h" Guid="*">
+                                    <File Id="wuautil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\wuautil.h" />
+                                </Component>
+                                <Component Id="xmlutil.h" Guid="*">
+                                    <File Id="xmlutil.h" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\inc\xmlutil.h" />
+                                </Component>
+                            </Directory>
+                            <Directory Id="vs2010" Name="vs2010">
+                                <Directory Id="lib" Name="lib">
+                                    <Directory Id="x64" Name="x64">
+                                        <Component Id="deputil.lib" Guid="*">
+                                            <File Id="deputil.lib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib" Guid="*">
+                                            <File Id="dutil.lib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib" Guid="*">
+                                            <File Id="wcautil.lib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x86" Name="x86">
+                                        <Component Id="balutil.lib" Guid="*">
+                                            <File Id="balutil.lib" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x86\balutil.lib" />
+                                        </Component>
+                                        <Component Id="deputil.lib_1" Guid="*">
+                                            <File Id="deputil.lib_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x86\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_1" Guid="*">
+                                            <File Id="dutil.lib_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x86\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_1" Guid="*">
+                                            <File Id="wcautil.lib_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2010\lib\x86\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                </Directory>
+                            </Directory>
+                            <Directory Id="vs2012" Name="vs2012">
+                                <Directory Id="lib_1" Name="lib">
+                                    <Directory Id="x64_1" Name="x64">
+                                        <Component Id="deputil.lib_2" Guid="*">
+                                            <File Id="deputil.lib_2" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_2" Guid="*">
+                                            <File Id="dutil.lib_2" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_2" Guid="*">
+                                            <File Id="wcautil.lib_2" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x86_1" Name="x86">
+                                        <Component Id="balutil.lib_1" Guid="*">
+                                            <File Id="balutil.lib_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x86\balutil.lib" />
+                                        </Component>
+                                        <Component Id="deputil.lib_3" Guid="*">
+                                            <File Id="deputil.lib_3" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x86\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_3" Guid="*">
+                                            <File Id="dutil.lib_3" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x86\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_3" Guid="*">
+                                            <File Id="wcautil.lib_3" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2012\lib\x86\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                </Directory>
+                            </Directory>
+                            <Directory Id="vs2013" Name="vs2013">
+                                <Directory Id="lib_2" Name="lib">
+                                    <Directory Id="x64_2" Name="x64">
+                                        <Component Id="deputil.lib_4" Guid="*">
+                                            <File Id="deputil.lib_4" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_4" Guid="*">
+                                            <File Id="dutil.lib_4" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_4" Guid="*">
+                                            <File Id="wcautil.lib_4" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x86_2" Name="x86">
+                                        <Component Id="balutil.lib_2" Guid="*">
+                                            <File Id="balutil.lib_2" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x86\balutil.lib" />
+                                        </Component>
+                                        <Component Id="deputil.lib_5" Guid="*">
+                                            <File Id="deputil.lib_5" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x86\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_5" Guid="*">
+                                            <File Id="dutil.lib_5" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x86\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_5" Guid="*">
+                                            <File Id="wcautil.lib_5" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2013\lib\x86\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                </Directory>
+                            </Directory>
+                            <Directory Id="vs2015" Name="vs2015">
+                                <Directory Id="lib_3" Name="lib">
+                                    <Directory Id="x64_3" Name="x64">
+                                        <Component Id="deputil.lib_6" Guid="*">
+                                            <File Id="deputil.lib_6" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_6" Guid="*">
+                                            <File Id="dutil.lib_6" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_6" Guid="*">
+                                            <File Id="wcautil.lib_6" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x86_3" Name="x86">
+                                        <Component Id="balutil.lib_3" Guid="*">
+                                            <File Id="balutil.lib_3" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x86\balutil.lib" />
+                                        </Component>
+                                        <Component Id="deputil.lib_7" Guid="*">
+                                            <File Id="deputil.lib_7" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x86\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_7" Guid="*">
+                                            <File Id="dutil.lib_7" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x86\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_7" Guid="*">
+                                            <File Id="wcautil.lib_7" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2015\lib\x86\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                </Directory>
+                            </Directory>
+                            <Directory Id="vs2017" Name="vs2017">
+                                <Directory Id="lib_4" Name="lib">
+                                    <Directory Id="arm64" Name="arm64">
+                                        <Component Id="deputil.lib_8" Guid="*">
+                                            <File Id="deputil.lib_8" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\arm64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_8" Guid="*">
+                                            <File Id="dutil.lib_8" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\arm64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_8" Guid="*">
+                                            <File Id="wcautil.lib_8" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\arm64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x64_4" Name="x64">
+                                        <Component Id="deputil.lib_9" Guid="*">
+                                            <File Id="deputil.lib_9" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x64\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_9" Guid="*">
+                                            <File Id="dutil.lib_9" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x64\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_9" Guid="*">
+                                            <File Id="wcautil.lib_9" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x64\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                    <Directory Id="x86_4" Name="x86">
+                                        <Component Id="balutil.lib_4" Guid="*">
+                                            <File Id="balutil.lib_4" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x86\balutil.lib" />
+                                        </Component>
+                                        <Component Id="deputil.lib_10" Guid="*">
+                                            <File Id="deputil.lib_10" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x86\deputil.lib" />
+                                        </Component>
+                                        <Component Id="dutil.lib_10" Guid="*">
+                                            <File Id="dutil.lib_10" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x86\dutil.lib" />
+                                        </Component>
+                                        <Component Id="wcautil.lib_10" Guid="*">
+                                            <File Id="wcautil.lib_10" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\vs2017\lib\x86\wcautil.lib" />
+                                        </Component>
+                                    </Directory>
+                                </Directory>
+                            </Directory>
+                            <Directory Id="x64_5" Name="x64">
+                                <Component Id="sfxca.dll" Guid="*">
+                                    <File Id="sfxca.dll" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\x64\sfxca.dll" />
+                                </Component>
+                            </Directory>
+                            <Directory Id="x86_5" Name="x86">
+                                <Component Id="sfxca.dll_1" Guid="*">
+                                    <File Id="sfxca.dll_1" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\sdk\x86\sfxca.dll" />
+                                </Component>
+                            </Directory>
+                        </Directory>
+                        <Directory Id="x86_6" Name="x86">
+                            <Component Id="burn.exe" Guid="*">
+                                <File Id="burn.exe" KeyPath="yes" Source="SourceDir\packages\wix.3.14.1\tools\x86\burn.exe" />
+                            </Component>
+                        </Directory>
+                    </Directory>
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ComponentGroup">
+            <ComponentRef Id="Heat.bat" />
+            <ComponentRef Id="networkvpn.ico" />
+            <ComponentRef Id="packages.config" />
+            <ComponentRef Id="Product_backup.txt" />
+            <ComponentRef Id="Product.wxs" />
+            <ComponentRef Id="run.bat" />
+            <ComponentRef Id="SetupSilentVPN.wax" />
+            <ComponentRef Id="SetupSilentVPN_Old.wixproj" />
+            <ComponentRef Id="Test.txt" />
+            <ComponentRef Id="install.log" />
+            <ComponentRef Id="Setup.bat" />
+            <ComponentRef Id="SilentVPN.msi" />
+            <ComponentRef Id="System.IO.Compression.dll" />
+            <ComponentRef Id="networkvpn.ico_1" />
+            <ComponentRef Id="Product.wixobj" />
+            <ComponentRef Id="SetupSilentVPN.wixproj.BindBuiltOutputsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN.wixproj.BindContentsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN.wixproj.BindOutputsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN.wixproj.FileList.txt" />
+            <ComponentRef Id="SetupSilentVPN_Old.wixproj.BindBuiltOutputsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN_Old.wixproj.BindContentsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN_Old.wixproj.BindOutputsFileListnull.txt" />
+            <ComponentRef Id="SetupSilentVPN_Old.wixproj.FileList.txt" />
+            <ComponentRef Id="_.signature.p7s" />
+            <ComponentRef Id="wix.3.14.1.nupkg" />
+            <ComponentRef Id="wix.png" />
+            <ComponentRef Id="wix.props" />
+            <ComponentRef Id="candle.exe" />
+            <ComponentRef Id="candle.exe.config" />
+            <ComponentRef Id="darice.cub" />
+            <ComponentRef Id="dark.exe" />
+            <ComponentRef Id="dark.exe.config" />
+            <ComponentRef Id="difxapp_x64.wixlib" />
+            <ComponentRef Id="difxapp_x86.wixlib" />
+            <ComponentRef Id="heat.exe" />
+            <ComponentRef Id="heat.exe.config" />
+            <ComponentRef Id="insignia.exe" />
+            <ComponentRef Id="insignia.exe.config" />
+            <ComponentRef Id="LICENSE.TXT" />
+            <ComponentRef Id="light.exe" />
+            <ComponentRef Id="light.exe.config" />
+            <ComponentRef Id="lit.exe" />
+            <ComponentRef Id="lit.exe.config" />
+            <ComponentRef Id="lux.exe" />
+            <ComponentRef Id="lux.exe.config" />
+            <ComponentRef Id="lux.targets" />
+            <ComponentRef Id="LuxTasks.dll" />
+            <ComponentRef Id="melt.exe" />
+            <ComponentRef Id="melt.exe.config" />
+            <ComponentRef Id="mergemod.cub" />
+            <ComponentRef Id="mergemod.dll" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.Cab.dll" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.dll" />
+            <ComponentRef Id="Microsoft.Deployment.Resources.dll" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.dll" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.Package.dll" />
+            <ComponentRef Id="mspatchc.dll" />
+            <ComponentRef Id="nit.exe" />
+            <ComponentRef Id="pyro.exe" />
+            <ComponentRef Id="pyro.exe.config" />
+            <ComponentRef Id="retina.exe" />
+            <ComponentRef Id="retina.exe.config" />
+            <ComponentRef Id="shine.exe" />
+            <ComponentRef Id="shine.exe.config" />
+            <ComponentRef Id="smoke.exe" />
+            <ComponentRef Id="smoke.exe.config" />
+            <ComponentRef Id="ThmViewer.exe" />
+            <ComponentRef Id="torch.exe" />
+            <ComponentRef Id="torch.exe.config" />
+            <ComponentRef Id="wconsole.dll" />
+            <ComponentRef Id="winterop.dll" />
+            <ComponentRef Id="wix.dll" />
+            <ComponentRef Id="wix.targets" />
+            <ComponentRef Id="WixBalExtension.dll" />
+            <ComponentRef Id="WixComPlusExtension.dll" />
+            <ComponentRef Id="WixCop.exe" />
+            <ComponentRef Id="WixDependencyExtension.dll" />
+            <ComponentRef Id="WixDifxAppExtension.dll" />
+            <ComponentRef Id="WixDirectXExtension.dll" />
+            <ComponentRef Id="WixFirewallExtension.dll" />
+            <ComponentRef Id="WixGamingExtension.dll" />
+            <ComponentRef Id="WixHttpExtension.dll" />
+            <ComponentRef Id="WixIIsExtension.dll" />
+            <ComponentRef Id="WixLuxExtension.dll" />
+            <ComponentRef Id="WixMsmqExtension.dll" />
+            <ComponentRef Id="WixNetFxExtension.dll" />
+            <ComponentRef Id="WixPSExtension.dll" />
+            <ComponentRef Id="WixSqlExtension.dll" />
+            <ComponentRef Id="WixTagExtension.dll" />
+            <ComponentRef Id="WixTasks.dll" />
+            <ComponentRef Id="WixUIExtension.dll" />
+            <ComponentRef Id="WixUtilExtension.dll" />
+            <ComponentRef Id="WixVSExtension.dll" />
+            <ComponentRef Id="WixVSExtension.MSBuild12.dll" />
+            <ComponentRef Id="WixVSExtension.MSBuild14.dll" />
+            <ComponentRef Id="bal.xsd" />
+            <ComponentRef Id="complus.xsd" />
+            <ComponentRef Id="Dependency.xsd" />
+            <ComponentRef Id="difxapp.xsd" />
+            <ComponentRef Id="DTF.chm" />
+            <ComponentRef Id="DTFAPI.chm" />
+            <ComponentRef Id="firewall.xsd" />
+            <ComponentRef Id="gaming.xsd" />
+            <ComponentRef Id="http.xsd" />
+            <ComponentRef Id="iis.xsd" />
+            <ComponentRef Id="lux.xsd" />
+            <ComponentRef Id="msmq.xsd" />
+            <ComponentRef Id="netfx.xsd" />
+            <ComponentRef Id="ps.xsd" />
+            <ComponentRef Id="sql.xsd" />
+            <ComponentRef Id="tag.xsd" />
+            <ComponentRef Id="thmutil.xsd" />
+            <ComponentRef Id="util.xsd" />
+            <ComponentRef Id="vs.xsd" />
+            <ComponentRef Id="WiX.chm" />
+            <ComponentRef Id="wix.xsd" />
+            <ComponentRef Id="wixloc.xsd" />
+            <ComponentRef Id="BootstrapperCore.config" />
+            <ComponentRef Id="BootstrapperCore.dll" />
+            <ComponentRef Id="BootstrapperCore.xml" />
+            <ComponentRef Id="DocCompiler.exe" />
+            <ComponentRef Id="MakeSfxCA.exe" />
+            <ComponentRef Id="MakeSfxCA.exe.config" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.Cab.dll_1" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.Cab.xml" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.dll_1" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.xml" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.Zip.dll" />
+            <ComponentRef Id="Microsoft.Deployment.Compression.Zip.xml" />
+            <ComponentRef Id="Microsoft.Deployment.Resources.dll_1" />
+            <ComponentRef Id="Microsoft.Deployment.Resources.xml" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.dll_1" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.Linq.dll" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.Linq.xml" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.Package.dll_1" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.Package.xml" />
+            <ComponentRef Id="Microsoft.Deployment.WindowsInstaller.xml" />
+            <ComponentRef Id="MsgGen.exe" />
+            <ComponentRef Id="wix.ca.targets" />
+            <ComponentRef Id="wix.nativeca.targets" />
+            <ComponentRef Id="XsdGen.exe" />
+            <ComponentRef Id="XsdStitch.exe" />
+            <ComponentRef Id="aclutil.h" />
+            <ComponentRef Id="apputil.h" />
+            <ComponentRef Id="apuputil.h" />
+            <ComponentRef Id="atomutil.h" />
+            <ComponentRef Id="BalBaseBootstrapperApplication.h" />
+            <ComponentRef Id="balcondition.h" />
+            <ComponentRef Id="balinfo.h" />
+            <ComponentRef Id="balretry.h" />
+            <ComponentRef Id="balutil.h" />
+            <ComponentRef Id="buffutil.h" />
+            <ComponentRef Id="butil.h" />
+            <ComponentRef Id="cabcutil.h" />
+            <ComponentRef Id="cabutil.h" />
+            <ComponentRef Id="certutil.h" />
+            <ComponentRef Id="conutil.h" />
+            <ComponentRef Id="cryputil.h" />
+            <ComponentRef Id="custommsierrors.h" />
+            <ComponentRef Id="deputil.h" />
+            <ComponentRef Id="dictutil.h" />
+            <ComponentRef Id="dirutil.h" />
+            <ComponentRef Id="dlutil.h" />
+            <ComponentRef Id="dutil.h" />
+            <ComponentRef Id="eseutil.h" />
+            <ComponentRef Id="fileutil.h" />
+            <ComponentRef Id="gdiputil.h" />
+            <ComponentRef Id="IBootstrapperApplication.h" />
+            <ComponentRef Id="IBootstrapperBAFunction.h" />
+            <ComponentRef Id="IBootstrapperEngine.h" />
+            <ComponentRef Id="iis7util.h" />
+            <ComponentRef Id="inetutil.h" />
+            <ComponentRef Id="iniutil.h" />
+            <ComponentRef Id="jsonutil.h" />
+            <ComponentRef Id="locutil.h" />
+            <ComponentRef Id="logutil.h" />
+            <ComponentRef Id="memutil.h" />
+            <ComponentRef Id="metautil.h" />
+            <ComponentRef Id="osutil.h" />
+            <ComponentRef Id="pathutil.h" />
+            <ComponentRef Id="perfutil.h" />
+            <ComponentRef Id="polcutil.h" />
+            <ComponentRef Id="procutil.h" />
+            <ComponentRef Id="regutil.h" />
+            <ComponentRef Id="resrutil.h" />
+            <ComponentRef Id="reswutil.h" />
+            <ComponentRef Id="rexutil.h" />
+            <ComponentRef Id="rmutil.h" />
+            <ComponentRef Id="rssutil.h" />
+            <ComponentRef Id="sceutil.h" />
+            <ComponentRef Id="shelutil.h" />
+            <ComponentRef Id="sqlutil.h" />
+            <ComponentRef Id="srputil.h" />
+            <ComponentRef Id="strutil.h" />
+            <ComponentRef Id="svcutil.h" />
+            <ComponentRef Id="thmutil.h" />
+            <ComponentRef Id="timeutil.h" />
+            <ComponentRef Id="uriutil.h" />
+            <ComponentRef Id="userutil.h" />
+            <ComponentRef Id="wcalog.h" />
+            <ComponentRef Id="wcautil.h" />
+            <ComponentRef Id="wcawow64.h" />
+            <ComponentRef Id="wcawrapquery.h" />
+            <ComponentRef Id="wiutil.h" />
+            <ComponentRef Id="wuautil.h" />
+            <ComponentRef Id="xmlutil.h" />
+            <ComponentRef Id="deputil.lib" />
+            <ComponentRef Id="dutil.lib" />
+            <ComponentRef Id="wcautil.lib" />
+            <ComponentRef Id="balutil.lib" />
+            <ComponentRef Id="deputil.lib_1" />
+            <ComponentRef Id="dutil.lib_1" />
+            <ComponentRef Id="wcautil.lib_1" />
+            <ComponentRef Id="deputil.lib_2" />
+            <ComponentRef Id="dutil.lib_2" />
+            <ComponentRef Id="wcautil.lib_2" />
+            <ComponentRef Id="balutil.lib_1" />
+            <ComponentRef Id="deputil.lib_3" />
+            <ComponentRef Id="dutil.lib_3" />
+            <ComponentRef Id="wcautil.lib_3" />
+            <ComponentRef Id="deputil.lib_4" />
+            <ComponentRef Id="dutil.lib_4" />
+            <ComponentRef Id="wcautil.lib_4" />
+            <ComponentRef Id="balutil.lib_2" />
+            <ComponentRef Id="deputil.lib_5" />
+            <ComponentRef Id="dutil.lib_5" />
+            <ComponentRef Id="wcautil.lib_5" />
+            <ComponentRef Id="deputil.lib_6" />
+            <ComponentRef Id="dutil.lib_6" />
+            <ComponentRef Id="wcautil.lib_6" />
+            <ComponentRef Id="balutil.lib_3" />
+            <ComponentRef Id="deputil.lib_7" />
+            <ComponentRef Id="dutil.lib_7" />
+            <ComponentRef Id="wcautil.lib_7" />
+            <ComponentRef Id="deputil.lib_8" />
+            <ComponentRef Id="dutil.lib_8" />
+            <ComponentRef Id="wcautil.lib_8" />
+            <ComponentRef Id="deputil.lib_9" />
+            <ComponentRef Id="dutil.lib_9" />
+            <ComponentRef Id="wcautil.lib_9" />
+            <ComponentRef Id="balutil.lib_4" />
+            <ComponentRef Id="deputil.lib_10" />
+            <ComponentRef Id="dutil.lib_10" />
+            <ComponentRef Id="wcautil.lib_10" />
+            <ComponentRef Id="sfxca.dll" />
+            <ComponentRef Id="sfxca.dll_1" />
+            <ComponentRef Id="burn.exe" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

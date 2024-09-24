@@ -1,0 +1,21 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+
+	<Fragment>
+		<UI Id="SetupDialogUI">
+			<Property Id="Install" Value="installbtn" />
+			<Binary Id="installbtn" SourceFile="images/installbtn.bmp" />
+	
+		</UI>
+
+
+		<InstallUISequence>
+
+
+			
+		</InstallUISequence>
+
+	</Fragment>
+
+
+</Wix>

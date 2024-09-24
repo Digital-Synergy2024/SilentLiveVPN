@@ -1,0 +1,65 @@
+﻿<Project Sdk="WixToolset.Sdk/5.0.1">
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProductVersion>3.1.4</ProductVersion>
+    <OutputName>SilentVPN</OutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <DefineConstants>
+    </DefineConstants>
+    <BindFiles>true</BindFiles>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dialog.wxs" />
+    <Compile Include="GeneratedFileList.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="SetupDialog.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\installbtn.bmp" />
+    <Content Include="Include.wxi" />
+    <Content Include="networkvpn.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetupSilentVPN.wax" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Heat" Version="4.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleApp1\ConsoleApp1.csproj">
+      <Name>ConsoleApp1</Name>
+      <Project>{24904976-045a-4307-ae5f-919e361a48f6}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MyCustomActions\MyCustomActions.csproj">
+      <Name>MyCustomActions</Name>
+      <Project>{848754c5-7e89-480a-9369-c8058eee36da}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SilentLiveVPN\SilentLiveVPN.csproj">
+      <Name>SilentLiveVPN</Name>
+      <Project>{7d7b1c13-3072-47ad-bced-885a52ee98d0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="Heat.bat" />
+  </Target>
+</Project>

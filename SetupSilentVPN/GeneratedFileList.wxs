@@ -1,0 +1,252 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Fragment>
+        <DirectoryRef Id="INSTALLFOLDER">
+            <Component Id="auth.txt">
+                <File Id="auth.txt" KeyPath="yes" Source="SourceDir\auth.txt" />
+            </Component>
+            <Component Id="config.ovpn">
+                <File Id="config.ovpn" KeyPath="yes" Source="SourceDir\config.ovpn" />
+            </Component>
+            <Component Id="DevExpress.Data.v18.1.dll">
+                <File Id="DevExpress.Data.v18.1.dll" KeyPath="yes" Source="SourceDir\DevExpress.Data.v18.1.dll" />
+            </Component>
+            <Component Id="DevExpress.Data.v18.1.xml">
+                <File Id="DevExpress.Data.v18.1.xml" KeyPath="yes" Source="SourceDir\DevExpress.Data.v18.1.xml" />
+            </Component>
+            <Component Id="IrisSkin2.dll">
+                <File Id="IrisSkin2.dll" KeyPath="yes" Source="SourceDir\IrisSkin2.dll" />
+            </Component>
+            <Component Id="vpns.txt">
+                <File Id="vpns.txt" KeyPath="yes" Source="SourceDir\vpns.txt" />
+            </Component>
+            <Directory Id="s" Name="s">
+                <Component Id="a__1_.ssk">
+                    <File Id="a__1_.ssk" KeyPath="yes" Source="SourceDir\s\a (1).ssk" />
+                </Component>
+                <Component Id="a__10_.ssk">
+                    <File Id="a__10_.ssk" KeyPath="yes" Source="SourceDir\s\a (10).ssk" />
+                </Component>
+                <Component Id="a__11_.ssk">
+                    <File Id="a__11_.ssk" KeyPath="yes" Source="SourceDir\s\a (11).ssk" />
+                </Component>
+                <Component Id="a__12_.ssk">
+                    <File Id="a__12_.ssk" KeyPath="yes" Source="SourceDir\s\a (12).ssk" />
+                </Component>
+                <Component Id="a__13_.ssk">
+                    <File Id="a__13_.ssk" KeyPath="yes" Source="SourceDir\s\a (13).ssk" />
+                </Component>
+                <Component Id="a__14_.ssk">
+                    <File Id="a__14_.ssk" KeyPath="yes" Source="SourceDir\s\a (14).ssk" />
+                </Component>
+                <Component Id="a__15_.ssk">
+                    <File Id="a__15_.ssk" KeyPath="yes" Source="SourceDir\s\a (15).ssk" />
+                </Component>
+                <Component Id="a__16_.ssk">
+                    <File Id="a__16_.ssk" KeyPath="yes" Source="SourceDir\s\a (16).ssk" />
+                </Component>
+                <Component Id="a__17_.ssk">
+                    <File Id="a__17_.ssk" KeyPath="yes" Source="SourceDir\s\a (17).ssk" />
+                </Component>
+                <Component Id="a__18_.ssk">
+                    <File Id="a__18_.ssk" KeyPath="yes" Source="SourceDir\s\a (18).ssk" />
+                </Component>
+                <Component Id="a__19_.ssk">
+                    <File Id="a__19_.ssk" KeyPath="yes" Source="SourceDir\s\a (19).ssk" />
+                </Component>
+                <Component Id="a__2_.ssk">
+                    <File Id="a__2_.ssk" KeyPath="yes" Source="SourceDir\s\a (2).ssk" />
+                </Component>
+                <Component Id="a__20_.ssk">
+                    <File Id="a__20_.ssk" KeyPath="yes" Source="SourceDir\s\a (20).ssk" />
+                </Component>
+                <Component Id="a__21_.ssk">
+                    <File Id="a__21_.ssk" KeyPath="yes" Source="SourceDir\s\a (21).ssk" />
+                </Component>
+                <Component Id="a__22_.ssk">
+                    <File Id="a__22_.ssk" KeyPath="yes" Source="SourceDir\s\a (22).ssk" />
+                </Component>
+                <Component Id="a__23_.ssk">
+                    <File Id="a__23_.ssk" KeyPath="yes" Source="SourceDir\s\a (23).ssk" />
+                </Component>
+                <Component Id="a__24_.ssk">
+                    <File Id="a__24_.ssk" KeyPath="yes" Source="SourceDir\s\a (24).ssk" />
+                </Component>
+                <Component Id="a__25_.ssk">
+                    <File Id="a__25_.ssk" KeyPath="yes" Source="SourceDir\s\a (25).ssk" />
+                </Component>
+                <Component Id="a__26_.ssk">
+                    <File Id="a__26_.ssk" KeyPath="yes" Source="SourceDir\s\a (26).ssk" />
+                </Component>
+                <Component Id="a__27_.ssk">
+                    <File Id="a__27_.ssk" KeyPath="yes" Source="SourceDir\s\a (27).ssk" />
+                </Component>
+                <Component Id="a__28_.ssk">
+                    <File Id="a__28_.ssk" KeyPath="yes" Source="SourceDir\s\a (28).ssk" />
+                </Component>
+                <Component Id="a__29_.ssk">
+                    <File Id="a__29_.ssk" KeyPath="yes" Source="SourceDir\s\a (29).ssk" />
+                </Component>
+                <Component Id="a__3_.ssk">
+                    <File Id="a__3_.ssk" KeyPath="yes" Source="SourceDir\s\a (3).ssk" />
+                </Component>
+                <Component Id="a__30_.ssk">
+                    <File Id="a__30_.ssk" KeyPath="yes" Source="SourceDir\s\a (30).ssk" />
+                </Component>
+                <Component Id="a__31_.ssk">
+                    <File Id="a__31_.ssk" KeyPath="yes" Source="SourceDir\s\a (31).ssk" />
+                </Component>
+                <Component Id="a__32_.ssk">
+                    <File Id="a__32_.ssk" KeyPath="yes" Source="SourceDir\s\a (32).ssk" />
+                </Component>
+                <Component Id="a__33_.ssk">
+                    <File Id="a__33_.ssk" KeyPath="yes" Source="SourceDir\s\a (33).ssk" />
+                </Component>
+                <Component Id="a__34_.ssk">
+                    <File Id="a__34_.ssk" KeyPath="yes" Source="SourceDir\s\a (34).ssk" />
+                </Component>
+                <Component Id="a__35_.ssk">
+                    <File Id="a__35_.ssk" KeyPath="yes" Source="SourceDir\s\a (35).ssk" />
+                </Component>
+                <Component Id="a__36_.ssk">
+                    <File Id="a__36_.ssk" KeyPath="yes" Source="SourceDir\s\a (36).ssk" />
+                </Component>
+                <Component Id="a__37_.ssk">
+                    <File Id="a__37_.ssk" KeyPath="yes" Source="SourceDir\s\a (37).ssk" />
+                </Component>
+                <Component Id="a__38_.ssk">
+                    <File Id="a__38_.ssk" KeyPath="yes" Source="SourceDir\s\a (38).ssk" />
+                </Component>
+                <Component Id="a__39_.ssk">
+                    <File Id="a__39_.ssk" KeyPath="yes" Source="SourceDir\s\a (39).ssk" />
+                </Component>
+                <Component Id="a__4_.ssk">
+                    <File Id="a__4_.ssk" KeyPath="yes" Source="SourceDir\s\a (4).ssk" />
+                </Component>
+                <Component Id="a__40_.ssk">
+                    <File Id="a__40_.ssk" KeyPath="yes" Source="SourceDir\s\a (40).ssk" />
+                </Component>
+                <Component Id="a__41_.ssk">
+                    <File Id="a__41_.ssk" KeyPath="yes" Source="SourceDir\s\a (41).ssk" />
+                </Component>
+                <Component Id="a__42_.ssk">
+                    <File Id="a__42_.ssk" KeyPath="yes" Source="SourceDir\s\a (42).ssk" />
+                </Component>
+                <Component Id="a__43_.ssk">
+                    <File Id="a__43_.ssk" KeyPath="yes" Source="SourceDir\s\a (43).ssk" />
+                </Component>
+                <Component Id="a__44_.ssk">
+                    <File Id="a__44_.ssk" KeyPath="yes" Source="SourceDir\s\a (44).ssk" />
+                </Component>
+                <Component Id="a__45_.ssk">
+                    <File Id="a__45_.ssk" KeyPath="yes" Source="SourceDir\s\a (45).ssk" />
+                </Component>
+                <Component Id="a__46_.ssk">
+                    <File Id="a__46_.ssk" KeyPath="yes" Source="SourceDir\s\a (46).ssk" />
+                </Component>
+                <Component Id="a__47_.ssk">
+                    <File Id="a__47_.ssk" KeyPath="yes" Source="SourceDir\s\a (47).ssk" />
+                </Component>
+                <Component Id="a__48_.ssk">
+                    <File Id="a__48_.ssk" KeyPath="yes" Source="SourceDir\s\a (48).ssk" />
+                </Component>
+                <Component Id="a__49_.ssk">
+                    <File Id="a__49_.ssk" KeyPath="yes" Source="SourceDir\s\a (49).ssk" />
+                </Component>
+                <Component Id="a__5_.ssk">
+                    <File Id="a__5_.ssk" KeyPath="yes" Source="SourceDir\s\a (5).ssk" />
+                </Component>
+                <Component Id="a__50_.ssk">
+                    <File Id="a__50_.ssk" KeyPath="yes" Source="SourceDir\s\a (50).ssk" />
+                </Component>
+                <Component Id="a__51_.ssk">
+                    <File Id="a__51_.ssk" KeyPath="yes" Source="SourceDir\s\a (51).ssk" />
+                </Component>
+                <Component Id="a__52_.ssk">
+                    <File Id="a__52_.ssk" KeyPath="yes" Source="SourceDir\s\a (52).ssk" />
+                </Component>
+                <Component Id="a__53_.ssk">
+                    <File Id="a__53_.ssk" KeyPath="yes" Source="SourceDir\s\a (53).ssk" />
+                </Component>
+                <Component Id="a__6_.ssk">
+                    <File Id="a__6_.ssk" KeyPath="yes" Source="SourceDir\s\a (6).ssk" />
+                </Component>
+                <Component Id="a__7_.ssk">
+                    <File Id="a__7_.ssk" KeyPath="yes" Source="SourceDir\s\a (7).ssk" />
+                </Component>
+                <Component Id="a__8_.ssk">
+                    <File Id="a__8_.ssk" KeyPath="yes" Source="SourceDir\s\a (8).ssk" />
+                </Component>
+                <Component Id="a__9_.ssk">
+                    <File Id="a__9_.ssk" KeyPath="yes" Source="SourceDir\s\a (9).ssk" />
+                </Component>
+                <Component Id="a_0_">
+                    <File Id="a_0_" KeyPath="yes" Source="SourceDir\s\a(0)" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ComponentGroup">
+            <ComponentRef Id="auth.txt" />
+            <ComponentRef Id="config.ovpn" />
+            <ComponentRef Id="DevExpress.Data.v18.1.dll" />
+            <ComponentRef Id="DevExpress.Data.v18.1.xml" />
+            <ComponentRef Id="IrisSkin2.dll" />
+            <ComponentRef Id="vpns.txt" />
+            <ComponentRef Id="a__1_.ssk" />
+            <ComponentRef Id="a__10_.ssk" />
+            <ComponentRef Id="a__11_.ssk" />
+            <ComponentRef Id="a__12_.ssk" />
+            <ComponentRef Id="a__13_.ssk" />
+            <ComponentRef Id="a__14_.ssk" />
+            <ComponentRef Id="a__15_.ssk" />
+            <ComponentRef Id="a__16_.ssk" />
+            <ComponentRef Id="a__17_.ssk" />
+            <ComponentRef Id="a__18_.ssk" />
+            <ComponentRef Id="a__19_.ssk" />
+            <ComponentRef Id="a__2_.ssk" />
+            <ComponentRef Id="a__20_.ssk" />
+            <ComponentRef Id="a__21_.ssk" />
+            <ComponentRef Id="a__22_.ssk" />
+            <ComponentRef Id="a__23_.ssk" />
+            <ComponentRef Id="a__24_.ssk" />
+            <ComponentRef Id="a__25_.ssk" />
+            <ComponentRef Id="a__26_.ssk" />
+            <ComponentRef Id="a__27_.ssk" />
+            <ComponentRef Id="a__28_.ssk" />
+            <ComponentRef Id="a__29_.ssk" />
+            <ComponentRef Id="a__3_.ssk" />
+            <ComponentRef Id="a__30_.ssk" />
+            <ComponentRef Id="a__31_.ssk" />
+            <ComponentRef Id="a__32_.ssk" />
+            <ComponentRef Id="a__33_.ssk" />
+            <ComponentRef Id="a__34_.ssk" />
+            <ComponentRef Id="a__35_.ssk" />
+            <ComponentRef Id="a__36_.ssk" />
+            <ComponentRef Id="a__37_.ssk" />
+            <ComponentRef Id="a__38_.ssk" />
+            <ComponentRef Id="a__39_.ssk" />
+            <ComponentRef Id="a__4_.ssk" />
+            <ComponentRef Id="a__40_.ssk" />
+            <ComponentRef Id="a__41_.ssk" />
+            <ComponentRef Id="a__42_.ssk" />
+            <ComponentRef Id="a__43_.ssk" />
+            <ComponentRef Id="a__44_.ssk" />
+            <ComponentRef Id="a__45_.ssk" />
+            <ComponentRef Id="a__46_.ssk" />
+            <ComponentRef Id="a__47_.ssk" />
+            <ComponentRef Id="a__48_.ssk" />
+            <ComponentRef Id="a__49_.ssk" />
+            <ComponentRef Id="a__5_.ssk" />
+            <ComponentRef Id="a__50_.ssk" />
+            <ComponentRef Id="a__51_.ssk" />
+            <ComponentRef Id="a__52_.ssk" />
+            <ComponentRef Id="a__53_.ssk" />
+            <ComponentRef Id="a__6_.ssk" />
+            <ComponentRef Id="a__7_.ssk" />
+            <ComponentRef Id="a__8_.ssk" />
+            <ComponentRef Id="a__9_.ssk" />
+            <ComponentRef Id="a_0_" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
