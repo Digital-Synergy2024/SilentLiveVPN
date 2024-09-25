@@ -2,11 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Windows.Forms.DataVisualization.Charting;
 namespace SilentLiveVPN
 {
-    class OpenVPNConnector
+    public class OpenVPNConnector
     {
         private string configFilePath; // Path to the .ovpn configuration file
 
@@ -127,6 +128,61 @@ namespace SilentLiveVPN
             {
                 AppendTextToOutput("An error occurred: " + ex.Message, listBox2);
             }
+        }
+
+
+        internal static async Task ConnecttoOpenVPN(string listBoxA, Label label2)
+        {
+            try
+            {
+                string configPath = "";
+                string[] ovpnFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.ovpn");
+                
+                foreach (string filePath in ovpnFiles)
+                {
+                    configPath = filePath;
+                }
+                OpenVPNConnector vpnConnector = new OpenVPNConnector(configPath);
+                string vpnAddress = vpnConnector.GetOpenVPNAddress(configPath);
+                label2.Text = vpnAddress;
+                string openVpnPath = @"C:\Program Files\OpenVPN\bin\openvpn.exe";
+                string authFileName = "auth.txt";
+                string authFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, authFileName);
+                vpnConnector.StartConnection(openVpnPath, authFilePath, listBoxA);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception: " + ex.Message, "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+        }
+
+
+        public static void LoanConfig(Label label4)
+        {
+            string directoryPath = AppDomain.CurrentDomain.BaseDirectory; // Specify your directory path
+            string fileExtension = "*.ovpn"; // Specify the file extension you are looking for
+
+            try
+            {
+                string[] files = Directory.GetFiles(directoryPath, fileExtension);
+                if (files.Length > 0) // Check if any files were found
+                {
+                    // Extract and display only the file names
+                    string[] fileNames = files.Select(file => Path.GetFileName(file)).ToArray();
+                    label4.Text = "VPNConfig:" + string.Join(", ", fileNames); // Display the found file names
+                }
+                else
+                {
+                    label4.Text = "OVPN file not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+
         }
 
     }
