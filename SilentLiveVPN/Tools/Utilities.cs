@@ -22,7 +22,7 @@ namespace SilentLiveVPN
             public float bytesReceived;
             public int counter = 0;
             //public bool openVPN;
-            ///public bool rasdial;
+            //public bool rasdial;
             public string processName = "openvpn";
             string vpnNameToCheck = "Silent_VPN";
             string selectedVPN;
@@ -128,13 +128,13 @@ namespace SilentLiveVPN
                         variables.OpenVPN = true; // Enable OpenVPN
                         variables.Rasdial = false; // Disable Rasdial
                                                    // Uncomment the line below to show a message
-                                                    MessageBox.Show("OpenVPN Enabled! Press connect");
+                        MessageBox.Show("OpenVPN Enabled! Press connect");
                         break;
 
                     case OpenVPNState.Enabled:
                         variables.OpenVPN = false; // Disable OpenVPN
-                                                   // Uncomment the line below to show a message
-                                                    MessageBox.Show("OpenVPN Disabled!");
+                        variables.Rasdial = true;  // Uncomment the line below to show a message
+                        MessageBox.Show("OpenVPN Disabled!");
                         break;
 
                     default:
@@ -337,7 +337,7 @@ namespace SilentLiveVPN
             variables.SelectedVPN = listBox1.SelectedItem.ToString();
             if (variables.OpenVPN)
             {
-                await OpenVPNConnector.ConnecttoOpenVPN(variables.SelectedVPN, label2);
+                await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
                 await GetExternalIpAsync(label1);
                 await CallUpdateContextMenuAsync();
                 MessageBox.Show("OpenVPN Connected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -357,13 +357,13 @@ namespace SilentLiveVPN
                 await TerminateProcess(variables.ProcessName);
                 label2.Text = "No Connection";
                 await GetExternalIpAsync(label1);
-                await Silent.UpdateContextMenu();
+                await CallUpdateContextMenuAsync();
             }
             else if (variables.Rasdial)
             {
                 await RasDialManager.DisconnectFromRas(listBox2);
                 await GetExternalIpAsync(label1);
-                await Silent.UpdateContextMenu();
+                await CallUpdateContextMenuAsync();
             }
 
         }

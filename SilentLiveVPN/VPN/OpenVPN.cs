@@ -131,7 +131,7 @@ namespace SilentLiveVPN
         }
 
 
-        internal static async Task ConnecttoOpenVPN(string listBoxA, Label label2)
+        internal static async Task ConnecttoOpenVPN(ListBox listBoxA, Label label2)
         {
             try
             {
