@@ -29,7 +29,7 @@
     <SupportUrl>https://silentlive.net/VPN</SupportUrl>
     <PublisherName>SilentLive</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -54,9 +54,15 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -66,20 +72,23 @@
     <StartupObject>SilentLiveVPN.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D0BCB2DDB77BE77DFD7438B582B63D9559B44BB2</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3C7528B0A2A4CA96CF74BED9F0C6AEB5E3B3EB57</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>SilentLiveVPN_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>SilentLiveVPN_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.v18.1, Version=18.1.16.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -89,6 +98,7 @@
       <HintPath>.\IrisSkin2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
@@ -103,6 +113,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tools\Bouncy.cs" />
+    <Compile Include="Tools\SimpleEncryptionBase.cs" />
     <Compile Include="VPN\CreateVPN.cs" />
     <Compile Include="VPN\OpenVPN.cs" />
     <Compile Include="Tools\RasDialManager.cs" />
@@ -133,6 +145,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MiscX\packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Silent.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -144,6 +157,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="MiscX\SilentLiveVPN_TemporaryKey.pfx" />
+    <None Include="SilentLiveVPN_1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MiscX\App.config">
@@ -166,12 +180,30 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BouncyCastle">
+      <Version>1.8.9</Version>
+    </PackageReference>
     <PackageReference Include="wix" Version="3.14.1" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PublishFile Include="SilentLiveVPN.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>silentVPN.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SilentLiveVPN_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -14,6 +14,7 @@ namespace SilentLiveVPN
 {
     public class Utilities
     {
+        OpenVPNConnector connector = new OpenVPNConnector();
         public class Variables
         {
             public Timer updateTimer;
@@ -21,15 +22,9 @@ namespace SilentLiveVPN
             public float bytesSent;
             public float bytesReceived;
             public int counter = 0;
-            //public bool openVPN;
-            //public bool rasdial;
             public string processName = "openvpn";
             string vpnNameToCheck = "Silent_VPN";
             string selectedVPN;
-
-            public bool OpenVPN { get; set; }
-            public bool Rasdial { get; set; }
-
 
             public Variables()
             {
@@ -78,17 +73,6 @@ namespace SilentLiveVPN
                 set { counter = value; }
             }
 
-            /*public bool OpenVPN
-            {
-                get { return openVPN; }
-                set { openVPN = value; }
-            }
-
-            public bool Rasdial
-            {
-                get { return rasdial; }
-                set { rasdial = value; }
-            }*/
         }
 
         private Variables variables;
@@ -98,50 +82,6 @@ namespace SilentLiveVPN
             variables = new Variables();
         }
 
-
-        // Define an enumeration for OpenVPN states
-        public enum OpenVPNState
-        {
-            Disabled,
-            Enabled
-        }
-
-
-        // Class containing the method to toggle OpenVPN
-        public class OpenVPNManager
-        {
-            private Variables variables;
-
-            public OpenVPNManager(Variables vars)
-            {
-                variables = vars;
-            }
-
-            public void ToggleOpenVPN()
-            {
-                // Convert the boolean state to an enum
-                OpenVPNState state = variables.OpenVPN ? OpenVPNState.Enabled : OpenVPNState.Disabled;
-
-                switch (state)
-                {
-                    case OpenVPNState.Disabled:
-                        variables.OpenVPN = true; // Enable OpenVPN
-                        variables.Rasdial = false; // Disable Rasdial
-                                                   // Uncomment the line below to show a message
-                        MessageBox.Show("OpenVPN Enabled! Press connect");
-                        break;
-
-                    case OpenVPNState.Enabled:
-                        variables.OpenVPN = false; // Disable OpenVPN
-                        variables.Rasdial = true;  // Uncomment the line below to show a message
-                        MessageBox.Show("OpenVPN Disabled!");
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException("Unexpected OpenVPN state");
-                }
-            }
-        }
 
         public void InitializeTimer(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
         {
@@ -325,6 +265,8 @@ namespace SilentLiveVPN
             // Assuming Silent is a class that has been instantiated
             Silent silentInstance = new Silent();
 
+            silentInstance.removeConectMenuItem();
+
             // Call the UpdateContextMenu method
             silentInstance.UpdateContextMenu();
 
@@ -332,40 +274,73 @@ namespace SilentLiveVPN
             await Task.Delay(100); // Simulating an asynchronous operation
         }
 
-        public async Task Connect(ListBox listBox1, Label label1, Label label2, Label label3, Label label5, ListBox listBox2) {
+        public async Task Connect(ListBox listBox1, Label label1, Label label2, Label label3, Label label5, ListBox listBox2, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3) {
 
-            variables.SelectedVPN = listBox1.SelectedItem.ToString();
-            if (variables.OpenVPN)
-            {
-                await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
-                await GetExternalIpAsync(label1);
-                await CallUpdateContextMenuAsync();
-                MessageBox.Show("OpenVPN Connected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //variables.SelectedVPN = listBox1.SelectedItem.ToString();
+
+            try {
+
+                if (radioButton1.Checked)
+                {
+                    await connector.AppendTextToOutput("Connecting...", listBox2);
+                    await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
+                    await GetExternalIpAsync(label1);
+                    await CallUpdateContextMenuAsync();
+                    //MessageBox.Show("OpenVPN Connected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (radioButton2.Checked)
+                {
+                    await connector.AppendTextToOutput("Connecting...", listBox2);
+                    LoadAuthList(label3, label5);
+                    await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
+                    await GetExternalIpAsync(label1);
+                    await CallUpdateContextMenuAsync();
+                }
+                else if (radioButton3.Checked) {
+
+                    LoadAuthList(label3, label5);
+                    await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
+                    await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
+
+                }
+                //MessageBox.Show("Connected successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (variables.Rasdial)
+            catch (Exception ex)
             {
-                LoadAuthList(label3, label5);
-                await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
-                await GetExternalIpAsync(label1);
-            }
+                // Handle any errors that may occur during file writing
+                MessageBox.Show($"An error occurred while Connecting: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }           
         }
 
-        public async Task DisConnect(ListBox listBox2, Label label1, Label label2)
+        public async Task DisConnect(ListBox listBox2, Label label1, Label label2, Label label3, Label label5, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3)
         {
-            if (variables.OpenVPN)
-            {
-                await TerminateProcess(variables.ProcessName);
-                label2.Text = "No Connection";
-                await GetExternalIpAsync(label1);
-                await CallUpdateContextMenuAsync();
-            }
-            else if (variables.Rasdial)
-            {
-                await RasDialManager.DisconnectFromRas(listBox2);
-                await GetExternalIpAsync(label1);
-                await CallUpdateContextMenuAsync();
-            }
+            try {
 
+                if (radioButton1.Checked)
+                {
+                    await TerminateProcess(variables.ProcessName);
+                    label2.Text = "No Connection";
+                    await GetExternalIpAsync(label1);
+                    await CallUpdateContextMenuAsync();
+                }
+                else if (radioButton2.Checked)
+                {
+                    await RasDialManager.DisconnectFromRas(listBox2);
+                    await GetExternalIpAsync(label1);
+                    await CallUpdateContextMenuAsync();
+                }
+                else if (radioButton3.Checked)
+                {
+                    LoadAuthList(label3, label5);
+                    await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors that may occur during file writing
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }          
         }
     }
 }

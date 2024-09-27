@@ -40,12 +40,14 @@
             this.WifiName = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.silentBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.button7 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -54,6 +56,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
@@ -66,9 +69,8 @@
             this.open = new System.Windows.Forms.ToolStripMenuItem();
             this.close = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.MenuStrip();
-            this.silentBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -76,7 +78,6 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.openToolStripMenuItem.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -185,6 +186,10 @@
             this.chart1.Text = "chart1";
             this.chart1.Visible = false;
             // 
+            // silentBindingSource
+            // 
+            this.silentBindingSource.DataSource = typeof(SilentLiveVPN.Silent);
+            // 
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
@@ -215,7 +220,6 @@
             this.label1.Size = new System.Drawing.Size(75, 24);
             this.label1.TabIndex = 11;
             this.label1.Text = "Your IP:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -244,6 +248,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.radioButton3);
             this.tabPage1.Controls.Add(this.button7);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.button3);
@@ -259,6 +264,18 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(220, 73);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(89, 26);
+            this.radioButton3.TabIndex = 19;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "SoftEther";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            //this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // button7
             // 
@@ -305,7 +322,6 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "RasdialVPN";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -317,7 +333,6 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "OpenVPN";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // button6
             // 
@@ -356,6 +371,18 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Lime;
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label4.Font = new System.Drawing.Font("Sylfaen", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(2, 118);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(121, 27);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "ConfigVPN:";
             // 
             // tabPage4
             // 
@@ -429,7 +456,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // listBox2
             // 
@@ -477,22 +503,6 @@
             this.exitToolStripMenuItem.TabIndex = 18;
             this.exitToolStripMenuItem.Text = "menuStrip2";
             // 
-            // silentBindingSource
-            // 
-            this.silentBindingSource.DataSource = typeof(SilentLiveVPN.Silent);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Lime;
-            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label4.Font = new System.Drawing.Font("Sylfaen", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(2, 118);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(121, 27);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "ConfigVPN:";
-            // 
             // Silent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -513,6 +523,7 @@
             this.Name = "Silent";
             this.Text = "SilentVPN";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -524,7 +535,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.openToolStripMenuItem.ResumeLayout(false);
             this.openToolStripMenuItem.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -567,6 +577,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RadioButton radioButton3;
     }
 }
 

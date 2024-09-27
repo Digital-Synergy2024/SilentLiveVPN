@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace SilentLiveVPN
 {
@@ -62,7 +63,7 @@ namespace SilentLiveVPN
         IntPtr lpPassword,
         int dwPasswordSize);
 
-        internal static void CreateL2TPVPN(string entryName, string phoneNumber, ListBox listBox2)
+        internal static async Task CreateL2TPVPNAsync(string entryName, string phoneNumber, ListBox listBox2)
         {
             RasEntry entry = new RasEntry
             {
@@ -79,7 +80,7 @@ namespace SilentLiveVPN
 
             if (result != 0)
             {
-                LogError(result, listBox2);
+                await LogErrorAsync(result, listBox2);
 
             }
         }
@@ -116,7 +117,7 @@ namespace SilentLiveVPN
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string szPassword;
         }*/
-
+        public static OpenVPNConnector connector = new OpenVPNConnector();
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct RasDialParams
         {
@@ -137,15 +138,15 @@ namespace SilentLiveVPN
             public int dwSubEntry;
         }
 
-        internal static void LogError(int errorCode, ListBox listBox2)
+        internal static async Task LogErrorAsync(int errorCode, ListBox listBox2)
         {
             StringBuilder errorMessage = new StringBuilder(256);
             int size = errorMessage.Capacity;
             RasGetErrorString(errorCode, errorMessage, ref size);
-            OpenVPNConnector.AppendTextToOutput($"Error connecting to VPN: {errorCode} - {errorMessage}", listBox2);
+            await connector.AppendTextToOutput($"Error connecting to VPN: {errorCode} - {errorMessage}", listBox2);
         }
 
-        internal static void ConnectToVPN(string entryName, string username, string password, ListBox listBox2)
+        internal static async Task ConnectToVPNAsync(string entryName, string username, string password, ListBox listBox2)
         {
             RasDialParams dialParams = new RasDialParams
             {
@@ -163,13 +164,13 @@ namespace SilentLiveVPN
 
             if (result == 0)
             {
-                OpenVPNConnector.AppendTextToOutput($"Connected to {entryName} VPN successfully!", listBox2);
+                await connector.AppendTextToOutput($"Connected to {entryName} VPN successfully!", listBox2);
             }
             else
             {
-                OpenVPNConnector.AppendTextToOutput($"Failed to connect to VPN. Error code: {resultString}", listBox2);
-                OpenVPNConnector.AppendTextToOutput($"VPN:{entryName} UserName:{username} Password:{password}", listBox2);
-                LogError(result, listBox2);
+                await connector.AppendTextToOutput($"Failed to connect to VPN. Error code: {resultString}", listBox2);
+                await connector.AppendTextToOutput($"VPN:{entryName} UserName:{username} Password:{password}", listBox2);
+                await LogErrorAsync(result, listBox2);
             }
         }
 

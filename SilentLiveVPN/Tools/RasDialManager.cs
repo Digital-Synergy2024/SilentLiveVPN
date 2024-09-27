@@ -5,12 +5,12 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using static SilentLiveVPN.RasDialWrapper;
-
     public class RasDialManager
     {
         // Constants for the RasSetCredentials function
         private const int RAS_MAXLEN = 256;
         private const int RASAPIVERSION = 1;
+  
 
         // Structure to hold the credentials
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -63,7 +63,7 @@
 
             //rasdial "MyVPN" /disconnect
 
-            shell.SendCmd("rasdial", "Silent_VPN /disconnect", "", listBox2);
+            await shell.SendCmd("rasdial", "Silent_VPN /disconnect", "", listBox2);
             /*int lpcb = 0;
             int lpcConnections = 0;
 
@@ -108,12 +108,12 @@
                 Marshal.FreeHGlobal(lpRasConn);
             }*/
         }
-
-        internal static async Task ConnectToRasVPN(string vpnName, string username, string password, ListBox listBox2)
+        public static OpenVPNConnector connector = new OpenVPNConnector();
+        public static async Task ConnectToRasVPN(string vpnName, string username, string password, ListBox listBox2)
         {
-            OpenVPNConnector.AppendTextToOutput($"Connecting to {vpnName}...", listBox2);
-            shell.SendCmd("rasdial", vpnName + " " + username + " " + password, "", listBox2);
-            OpenVPNConnector.AppendTextToOutput("rasdial" + " " + "Silent_VPN" + " " + username + " " + password + "", listBox2);
+            await connector.AppendTextToOutput($"Connecting to {vpnName}...", listBox2);
+            await shell.SendCmd("rasdial", vpnName + " " + username + " " + password, "", listBox2);
+            await connector.AppendTextToOutput("rasdial" + " " + "Silent_VPN" + " " + username + " " + password + "", listBox2);
             //RasDialWrapper.ConnectToVPN("SilentVPN", username, password, listBox2);
         }
     }

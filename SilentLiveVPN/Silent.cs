@@ -14,33 +14,31 @@ using System.Net.Http.Headers;
 using static SilentLiveVPN.RasDialWrapper;
 using static SilentLiveVPN.RasDialManager;
 using static SilentLiveVPN.Utilities;
-
+using static SilentLiveVPN.CreateVPN;
 namespace SilentLiveVPN
 { 
 
     public partial class Silent : Form
     {
         public static Utilities Tools = new Utilities();
+        public static CreateVPN createVPN = new CreateVPN();
         Variables variables = new Variables();
         public static ContextMenuStrip menu = new ContextMenuStrip { AutoClose = false };
 
-        public static Variables vars = new Variables();
-        OpenVPNManager manager = new OpenVPNManager(vars);
-
         public Silent()
         {
-            variables.OpenVPN = false;
+            
             InitializeComponent();
             Sunisoft.IrisSkin.SkinEngine skin = new Sunisoft.IrisSkin.SkinEngine();
             skin.SkinAllForm = true;
             // var path = "..\\..\\s\\a (1).ssk";
-            skin.SkinFile = Environment.CurrentDirectory + @"\s\a (40).ssk";
+            skin.SkinFile = Environment.CurrentDirectory + @"\s\a (45).ssk";
             InitializeContextMenu();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             //Tools.LoadGiphyImage(pictureBox1);
             Tools.LoadAuthList(label3, label5);
             this.Resize += new EventHandler(Form1_Resize);
-            this.Resize += MyForm_Resize; // Subscribe to the Resize event
+            //this.Resize += MyForm_Resize; // Subscribe to the Resize event
             this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
             openToolStripMenuItem.Click += new EventHandler(openToolStripMenuItem_Click);
             exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
@@ -75,16 +73,14 @@ namespace SilentLiveVPN
         public async void Option1_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 1 click
-            await Tools.Connect(listBox1, label1,  label2, label3, label5, listBox2);
+            await Tools.Connect(listBox1, label1,  label2, label3, label5, listBox2, radioButton1, radioButton2, radioButton3);
             menu.Close();
-            //MessageBox.Show("VPN Connected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public async void Option2_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 2 click
-            await Tools.DisConnect(listBox2, label1, label2);
-            //MessageBox.Show("VPN Disconnected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            await Tools.DisConnect(listBox2, label1, label2, label3, label5, radioButton1, radioButton2, radioButton3);
             menu.Close();
         }
 
@@ -119,7 +115,7 @@ namespace SilentLiveVPN
             notifyIcon1.Text = label2.Text;
         }
 
-        private void removeConectMenuItem() {
+        public void removeConectMenuItem() {
 
             RemoveMenuItem(label2.Text);
         }
@@ -145,12 +141,7 @@ namespace SilentLiveVPN
 
         public async void button1_ClickAsync(object sender, EventArgs e)
         {
-            await Tools.Connect(listBox1, label1, label2, label3, label5, listBox2);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
+            await Tools.Connect(listBox1, label1, label2, label3, label5, listBox2, radioButton1, radioButton2, radioButton3);
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -251,32 +242,16 @@ namespace SilentLiveVPN
             Application.Exit(); // Exit the application
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-  
-            
-        }
-
         //disconnect button
         private async void button2_Click_1Async(object sender, EventArgs e)
         {
-            await Tools.DisConnect(listBox2, label1, label2);
+            await Tools.DisConnect(listBox2, label1, label2, label3, label5, radioButton1, radioButton2, radioButton3);
         }
 
         private async void button5_Click(object sender, EventArgs e)
         {
             await Tools.SaveUserInputToFile(textBox1.Text, textBox2.Text);
             Tools.LoadAuthList(label3, label5);
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private async void button6_ClickAsync(object sender, EventArgs e)
@@ -292,26 +267,11 @@ namespace SilentLiveVPN
             await Tools.GetExternalIpAsync(label1);
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private async void button3_Click_1(object sender, EventArgs e)
         {
+            bool isTaken = createVPN.IsVpnNameTaken(variables.VpnNameToCheck);
 
-
-        }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            manager.ToggleOpenVPN();
-        }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            manager.ToggleOpenVPN();
-        }
-
-        private void button3_Click_1(object sender, EventArgs e)
-        {
-            
-            if (CreateVPN.IsVpnNameTaken(variables.VpnNameToCheck))
+            if (isTaken)
             {
                 MessageBox.Show($"The VPN is already setup.");
             }
@@ -331,7 +291,7 @@ namespace SilentLiveVPN
                     }
 
                     // Proceed to add the VPN if the string is valid
-                    CreateVPN.AddVPN(variables.SelectedVPN , listBox2);
+                    await createVPN.AddVPN(variables.SelectedVPN , listBox2);
                 }
                 else
                 {
@@ -342,10 +302,10 @@ namespace SilentLiveVPN
 
         }
         //updateVPN Adapter
-        private void button4_Click_1(object sender, EventArgs e)
+        private async void button4_Click_1(object sender, EventArgs e)
         {
-
-            if (CreateVPN.IsVpnNameTaken(variables.VpnNameToCheck))
+            bool isTaken = createVPN.IsVpnNameTaken(variables.VpnNameToCheck);
+            if (isTaken)
             {
                 // Ensure that the selected item is not null before converting to string
                 if (listBox1.SelectedItem != null)
@@ -360,7 +320,7 @@ namespace SilentLiveVPN
                     }
 
                     // Proceed to add the VPN if the string is valid
-                    CreateVPN.UpdateVPN(variables.SelectedVPN , listBox2);
+                    await createVPN.UpdateVPN(variables.SelectedVPN , listBox2);
                 }
                 else
                 {
@@ -374,10 +334,11 @@ namespace SilentLiveVPN
 
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        public async void button7_Click(object sender, EventArgs e)
         {
-           
-            if (CreateVPN.IsVpnNameTaken(variables.VpnNameToCheck))
+            bool isTaken = createVPN.IsVpnNameTaken(variables.VpnNameToCheck);
+
+            if (isTaken)
             {
 
                 // Ensure that the selected item is not null before converting to string
@@ -393,7 +354,7 @@ namespace SilentLiveVPN
                     }
 
                     // Proceed to add the VPN if the string is valid
-                    CreateVPN.GetVPNinfo(variables.SelectedVPN , listBox2);
+                    await createVPN.GetVPNinfo(variables.SelectedVPN , listBox2);
                 }
                 else
                 {
@@ -406,5 +367,6 @@ namespace SilentLiveVPN
             }
             
         }
+
     }
 }
