@@ -47,6 +47,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.button7 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -69,6 +71,11 @@
             this.open = new System.Windows.Forms.ToolStripMenuItem();
             this.close = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.MenuStrip();
+            this.OpenVPNlbl = new System.Windows.Forms.Label();
+            this.radiallbl = new System.Windows.Forms.Label();
+            this.softlbl = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.labelGeo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -85,7 +92,7 @@
             this.button1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.button1.Location = new System.Drawing.Point(-4, -1);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 34);
+            this.button1.Size = new System.Drawing.Size(111, 31);
             this.button1.TabIndex = 0;
             this.button1.Text = "Connect";
             this.button1.UseVisualStyleBackColor = false;
@@ -248,6 +255,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button9);
+            this.tabPage1.Controls.Add(this.button8);
             this.tabPage1.Controls.Add(this.radioButton3);
             this.tabPage1.Controls.Add(this.button7);
             this.tabPage1.Controls.Add(this.button4);
@@ -265,6 +274,28 @@
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.button9.Location = new System.Drawing.Point(103, 58);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(111, 31);
+            this.button9.TabIndex = 21;
+            this.button9.Text = "Graph";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.button8.Location = new System.Drawing.Point(217, 108);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(111, 46);
+            this.button8.TabIndex = 20;
+            this.button8.Text = "SoftEtherAdpater";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_ClickAsync);
+            // 
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
@@ -275,12 +306,11 @@
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "SoftEther";
             this.radioButton3.UseVisualStyleBackColor = true;
-            //this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // button7
             // 
             this.button7.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.button7.Location = new System.Drawing.Point(104, 36);
+            this.button7.Location = new System.Drawing.Point(103, 31);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(111, 31);
             this.button7.TabIndex = 18;
@@ -295,7 +325,7 @@
             this.button4.Location = new System.Drawing.Point(104, 3);
             this.button4.Name = "button4";
             this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button4.Size = new System.Drawing.Size(111, 32);
+            this.button4.Size = new System.Drawing.Size(111, 31);
             this.button4.TabIndex = 17;
             this.button4.Text = "Update Adapter";
             this.button4.UseVisualStyleBackColor = false;
@@ -503,12 +533,81 @@
             this.exitToolStripMenuItem.TabIndex = 18;
             this.exitToolStripMenuItem.Text = "menuStrip2";
             // 
+            // OpenVPNlbl
+            // 
+            this.OpenVPNlbl.AutoSize = true;
+            this.OpenVPNlbl.BackColor = System.Drawing.Color.Red;
+            this.OpenVPNlbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OpenVPNlbl.Enabled = false;
+            this.OpenVPNlbl.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenVPNlbl.Location = new System.Drawing.Point(12, 229);
+            this.OpenVPNlbl.Name = "OpenVPNlbl";
+            this.OpenVPNlbl.Size = new System.Drawing.Size(206, 24);
+            this.OpenVPNlbl.TabIndex = 19;
+            this.OpenVPNlbl.Text = "OpenVPN: Not Connected";
+            // 
+            // radiallbl
+            // 
+            this.radiallbl.AutoSize = true;
+            this.radiallbl.BackColor = System.Drawing.Color.Red;
+            this.radiallbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.radiallbl.Enabled = false;
+            this.radiallbl.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radiallbl.Location = new System.Drawing.Point(12, 253);
+            this.radiallbl.Name = "radiallbl";
+            this.radiallbl.Size = new System.Drawing.Size(171, 21);
+            this.radiallbl.TabIndex = 20;
+            this.radiallbl.Text = "Rasdial: Not Connected";
+            // 
+            // softlbl
+            // 
+            this.softlbl.AutoSize = true;
+            this.softlbl.BackColor = System.Drawing.Color.Red;
+            this.softlbl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.softlbl.Enabled = false;
+            this.softlbl.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.softlbl.Location = new System.Drawing.Point(12, 277);
+            this.softlbl.Name = "softlbl";
+            this.softlbl.Size = new System.Drawing.Size(184, 21);
+            this.softlbl.TabIndex = 21;
+            this.softlbl.Text = "SoftEther: Not Connected";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.Gray;
+            this.label11.Enabled = false;
+            this.label11.Font = new System.Drawing.Font("Sitka Text", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(119, 336);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(0, 47);
+            this.label11.TabIndex = 24;
+            this.label11.Visible = false;
+            // 
+            // labelGeo
+            // 
+            this.labelGeo.AutoSize = true;
+            this.labelGeo.BackColor = System.Drawing.Color.Chartreuse;
+            this.labelGeo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.labelGeo.Enabled = false;
+            this.labelGeo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelGeo.Location = new System.Drawing.Point(12, 298);
+            this.labelGeo.Name = "labelGeo";
+            this.labelGeo.Size = new System.Drawing.Size(97, 21);
+            this.labelGeo.TabIndex = 25;
+            this.labelGeo.Text = "GeoLocation";
+            // 
             // Silent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1397, 802);
+            this.Controls.Add(this.labelGeo);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.softlbl);
+            this.Controls.Add(this.radiallbl);
+            this.Controls.Add(this.OpenVPNlbl);
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tabControl1);
@@ -578,6 +677,13 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Label OpenVPNlbl;
+        private System.Windows.Forms.Label radiallbl;
+        private System.Windows.Forms.Label softlbl;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label labelGeo;
     }
 }
 

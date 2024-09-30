@@ -4,6 +4,9 @@
             <Component Id="auth.txt">
                 <File Id="auth.txt" KeyPath="yes" Source="SourceDir\auth.txt" />
             </Component>
+            <Component Id="BouncyCastle.Crypto.dll">
+                <File Id="BouncyCastle.Crypto.dll" KeyPath="yes" Source="SourceDir\BouncyCastle.Crypto.dll" />
+            </Component>
             <Component Id="config.ovpn">
                 <File Id="config.ovpn" KeyPath="yes" Source="SourceDir\config.ovpn" />
             </Component>
@@ -15,6 +18,9 @@
             </Component>
             <Component Id="IrisSkin2.dll">
                 <File Id="IrisSkin2.dll" KeyPath="yes" Source="SourceDir\IrisSkin2.dll" />
+            </Component>
+            <Component Id="SilentLiveVPN.exe.config">
+                <File Id="SilentLiveVPN.exe.config" KeyPath="yes" Source="SourceDir\SilentLiveVPN.exe.config" />
             </Component>
             <Component Id="vpns.txt">
                 <File Id="vpns.txt" KeyPath="yes" Source="SourceDir\vpns.txt" />
@@ -188,10 +194,12 @@
     <Fragment>
         <ComponentGroup Id="ComponentGroup">
             <ComponentRef Id="auth.txt" />
+            <ComponentRef Id="BouncyCastle.Crypto.dll" />
             <ComponentRef Id="config.ovpn" />
             <ComponentRef Id="DevExpress.Data.v18.1.dll" />
             <ComponentRef Id="DevExpress.Data.v18.1.xml" />
             <ComponentRef Id="IrisSkin2.dll" />
+            <ComponentRef Id="SilentLiveVPN.exe.config" />
             <ComponentRef Id="vpns.txt" />
             <ComponentRef Id="a__1_.ssk" />
             <ComponentRef Id="a__10_.ssk" />

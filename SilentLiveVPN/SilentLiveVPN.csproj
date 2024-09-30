@@ -88,7 +88,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <ApplicationManifest>MiscX\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.v18.1, Version=18.1.16.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tools\Bouncy.cs" />
+    <Compile Include="Tools\IpFetcher.cs" />
     <Compile Include="Tools\SimpleEncryptionBase.cs" />
     <Compile Include="VPN\CreateVPN.cs" />
     <Compile Include="VPN\OpenVPN.cs" />
@@ -141,9 +142,7 @@
     <EmbeddedResource Include="Silent.resx">
       <DependentUpon>Silent.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="MiscX\app.manifest">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="MiscX\app.manifest" />
     <None Include="MiscX\packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Silent.datasource" />
@@ -182,6 +181,9 @@
   <ItemGroup>
     <PackageReference Include="BouncyCastle">
       <Version>1.8.9</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="wix" Version="3.14.1" />
   </ItemGroup>

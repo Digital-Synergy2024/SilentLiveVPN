@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
-
+using static SilentLiveVPN.Tools.ipFecthing;
 namespace SilentLiveVPN
 {
     public class Utilities
@@ -18,30 +18,21 @@ namespace SilentLiveVPN
         public class Variables
         {
             public Timer updateTimer;
-            private string wifiRouter;
             public float bytesSent;
             public float bytesReceived;
             public int counter = 0;
             public string processName = "openvpn";
-            string vpnNameToCheck = "Silent_VPN";
-            string selectedVPN;
+            public string username;
+            public string nic;
 
             public Variables()
             {
                 updateTimer = new Timer();
             }
 
-            public string SelectedVPN
-            {
-                get { return selectedVPN; }
-                set { selectedVPN = value; }
-            }
+            public string SelectedVPN { get; set; }
 
-            public string VpnNameToCheck
-            {
-                get { return vpnNameToCheck; }
-                set { vpnNameToCheck = value; }
-            }
+            public string VpnNameToCheck { get; set; } = "Silent_VPN";
 
             public string ProcessName
             {
@@ -49,11 +40,7 @@ namespace SilentLiveVPN
                 set { processName = value; }
             }
 
-            public string WifiRouter
-            {
-                get { return wifiRouter; }
-                set { wifiRouter = value; }
-            }
+            public string WifiRouter { get; set; }
 
             public float BytesSent
             {
@@ -90,39 +77,69 @@ namespace SilentLiveVPN
             variables.updateTimer.Start();
         }
 
+        public async Task CheckIfVPNConnectedAsync() {
+
+ 
+            try {
+
+                await VpnDetection.IsUserConnectedToVpnAsync();
+
+
+            } catch(Exception ex) {
+
+                MessageBox.Show($"An error occurred GeoLocation: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
         public async Task UpdateTimer_TickAsync(object sender, EventArgs e, Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
         {
-            if (chart1.Enabled)
-            {
+
                 PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
-                string instance = performanceCounterCategory.GetInstanceNames()[1]; // 1st NIC
-                variables.WifiRouter = "";
+                bool instancethere = true;
+                string instance2 = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[0] : string.Empty;
+                string instance = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[1] : string.Empty;                
+                if (string.IsNullOrEmpty(instance))
+                {
+                    WifiName.Text = "No Network Interface Found";
+                    return;
+                }
+
+                string ethernetAdapterName = string.Empty;
+                string wifiAdapterName = string.Empty;
 
                 foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
                 {
-                    if (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && adapter.OperationalStatus == OperationalStatus.Up)
+                    if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet && adapter.OperationalStatus == OperationalStatus.Up)
                     {
-                        variables.WifiRouter = adapter.Name;
-                        break; // Exit the loop once we find the first active Wi-Fi adapter
+                        ethernetAdapterName = adapter.Name;
+                        instancethere = false;
+                    }
+                    else if (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && adapter.OperationalStatus == OperationalStatus.Up)
+                    {
+                        wifiAdapterName = adapter.Name;
                     }
                 }
 
-                PerformanceCounter bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
-                PerformanceCounter bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
+                WifiName.Text = !string.IsNullOrEmpty(ethernetAdapterName) ? $"Ethernet Adapter Name: {ethernetAdapterName}" :
+                                !string.IsNullOrEmpty(wifiAdapterName) ? $"WiFi Adapter Name: {wifiAdapterName}" :
+                                "No Active Network Adapters";
+
+                PerformanceCounter bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancethere ? instance : instance2);
+                PerformanceCounter bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancethere ? instance : instance2);
 
                 for (int i = 0; i < 10; ++i)
                 {
                     variables.bytesSent = bytesSentCounter.NextValue();
                     variables.bytesReceived = bytesReceivedCounter.NextValue();
-                    lblBytesSent.Text = $"Bytes Sent: {variables.bytesSent / 1024}";
-                    lblBytesReceived.Text = $"Bytes Received: {variables.bytesReceived / 1024}";
-                    WifiName.Text = "WiFi Adapter Name: " + variables.WifiRouter;
+                    lblBytesSent.Text = $"Bytes Sent: {variables.bytesSent / 1024} KB";
+                    lblBytesReceived.Text = $"Bytes Received: {variables.bytesReceived / 1024} KB";
                     chart1.Series["Bytes Sent"].Points.AddXY(variables.counter++, variables.bytesSent / 1024);
                     chart1.Series["Bytes Received"].Points.AddXY(variables.counter++, variables.bytesReceived / 1024);
+                    
                 }
                 await GetExternalIpAsync(label1);
                 LoadAuthList(label3, label5);
-            }
         }
 
         public async Task GetExternalIpAsync(Label label1)
@@ -164,7 +181,8 @@ namespace SilentLiveVPN
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while reading the file: " + ex.Message);
+                MessageBox.Show("An error occurred while reading the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
             }
         }
 
@@ -188,13 +206,13 @@ namespace SilentLiveVPN
                 label3.Text = $"{items[0]}";
                 label5.Text = $"{items[1]}";
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException )
             {
-                Console.WriteLine($"Error: The file '{filePath}' was not found. {ex.Message}");
+                //Console.WriteLine($"Error: The file '{filePath}' was not found. {ex.Message}");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                //Console.WriteLine($"An error occurred: {ex.Message}");
             }
 
         }
@@ -203,38 +221,53 @@ namespace SilentLiveVPN
         {
             try
             {
-                Process[] processes = Process.GetProcessesByName(processName);
-                if (processes.Length == 0)
+                // Use Task.Run to execute the blocking operation on a separate thread
+                await Task.Run(() =>
                 {
-                    MessageBox.Show($"No process found with the name: {processName}");
-                    return;
-                }
-                foreach (var process in processes)
-                {
-                    process.Kill();
-                }
-                MessageBox.Show($"{processName} has been terminated.");
+                    Process[] processes = Process.GetProcessesByName(processName);
+                    if (processes.Length == 0)
+                    {
+                        // Use a more appropriate way to notify the user in an async context
+                        throw new InvalidOperationException($"No process found with the name: {processName}");
+                    }
+                    foreach (var process in processes)
+                    {
+                        process.Kill();
+                    }
+                });
+
+                // Notify the user after the processes have been terminated
+                MessageBox.Show($"{processName} has been terminated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Handle specific exceptions related to process termination
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                // Handle any other exceptions that may occur
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        public async Task SaveUserInputToFile(string input1, string input2)
+        public async Task SaveUserInputToFileAsync(string input1, string input2)
         {
             // Define the file path where the data will be saved
             string filePath = "auth.txt";
             File.WriteAllText(filePath, string.Empty);
             try
             {
-                // Use StreamWriter to write to the file
+                // Use StreamWriter to write to the file asynchronously
                 using (StreamWriter writer = new StreamWriter(filePath, true))
                 {
-                    // Write the inputs to the file
-                    writer.WriteLine($"{input2}");
-                    writer.WriteLine($"{input1}");
-                    //writer.WriteLine("----------"); // Separator for clarity
+
+                    // Write the inputs to the file asynchronously
+                    await writer.WriteLineAsync(input2);
+                    await writer.WriteLineAsync(input1);
+                    // await writer.WriteLineAsync("----------"); // Uncomment for a separator
                 }
 
                 // Notify the user that the data has been saved
@@ -276,17 +309,14 @@ namespace SilentLiveVPN
 
         public async Task Connect(ListBox listBox1, Label label1, Label label2, Label label3, Label label5, ListBox listBox2, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3) {
 
-            //variables.SelectedVPN = listBox1.SelectedItem.ToString();
-
             try {
-
+                
                 if (radioButton1.Checked)
                 {
                     await connector.AppendTextToOutput("Connecting...", listBox2);
                     await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
-                    //MessageBox.Show("OpenVPN Connected!", "Message Box", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else if (radioButton2.Checked)
                 {
@@ -303,7 +333,7 @@ namespace SilentLiveVPN
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
 
                 }
-                //MessageBox.Show("Connected successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
             }
             catch (Exception ex)
             {
@@ -315,7 +345,7 @@ namespace SilentLiveVPN
         public async Task DisConnect(ListBox listBox2, Label label1, Label label2, Label label3, Label label5, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3)
         {
             try {
-
+                MessageBox.Show($"Test", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (radioButton1.Checked)
                 {
                     await TerminateProcess(variables.ProcessName);
