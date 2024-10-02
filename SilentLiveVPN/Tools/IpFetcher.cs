@@ -6,9 +6,13 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Newtonsoft.Json.Linq;
+    using System.IO;
+    using Newtonsoft.Json;
+    using System.Net;
+
     public class ipFecthing{
 
-        class IpFetcher
+        public class IpFetcher
         {
             private static readonly HttpClient client = new HttpClient();
             public static OpenVPNConnector connector = new OpenVPNConnector();
@@ -30,14 +34,15 @@
         }
 
 
-        class VpnChecker
+        public class VpnChecker
         {
             private static HashSet<string> knownVpnIps = new HashSet<string>
             {
-                "192.0.2.1", // Example VPN IP
+                "192.0.2.1", // Example VPN IP                  "69.5.138.33"
                 "203.0.113.5", // Another example
                 "51.79.52.118",
-                "74.91.115.15"
+                "74.91.115.15",
+                "69.5.138.33"
             };
 
             public static bool IsVpnIp(string ip)
@@ -55,7 +60,7 @@
             {
                 try
                 {
-                    string response = await client.GetStringAsync($"https://ipapi.co/{ip}/json/");
+                    string response = await client.GetStringAsync($"http://www.geoplugin.net/json.gp?ip={ip}");
 
                     return response; // This will return JSON data with location info
                 }
@@ -71,48 +76,32 @@
         {
             public static Utilities Tools = new Utilities();
             public static OpenVPNConnector connector = new OpenVPNConnector();
-            public static async Task<bool> IsUserConnectedToVpnAsync()
+
+            public static string GetIp()
             {
-                string publicIp = await IpFetcher.GetPublicIpAsync();
-                if (publicIp == null) return false;
-
-                bool isVpn = VpnChecker.IsVpnIp(publicIp);
-                if (isVpn)
+                string IPAddress = "";
+                IPHostEntry Host = default(IPHostEntry);
+                string Hostname = null;
+                Hostname = System.Environment.MachineName;
+                Host = Dns.GetHostEntry(Hostname);
+                foreach (IPAddress IP in Host.AddressList)
                 {
-                    string geoInfo = await GeoLocationService.GetGeoLocationAsync(publicIp);
-                    // Assuming geoInfo is in JSON format
-                    var geoData = JObject.Parse(geoInfo);
-                    string country = geoData["country"].ToString();
-                    string city = geoData["city"].ToString();
-                    await connector.AppendTextToOutput($"Geo-Location Info: Country: {country} City: {city}", Silent.listBoxOutPut);
-                    Silent.labelGeoA.Text = $"GeoLaction: {geoInfo}";
-
-                    if (Silent.RadioButtonVPN1.Checked) {
-
-                        Silent.OpenVPNlblA.Text = "Connected";
-
-                    } else if (Silent.RadioButtonVPN2.Checked) {
-
-                        Silent.RadiallblA.Text = "Connected";
-
-                    }
-                    else if (Silent.RadioButtonVPN3.Checked)
+                    if (IP.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
-
-                        Silent.SoftlblA.Text = "Connected";
-
+                        IPAddress = Convert.ToString(IP);
                     }
-                    return true; // User is connected to a VPN
                 }
-                Silent.OpenVPNlblA.Text = "Disconnected";
-                Silent.RadiallblA.Text = "Disconnected";
-                Silent.SoftlblA.Text = "Disconnected";
-                return false; // User is not connected to a VPN
+
+                return IPAddress;
             }
+
+
         }
 
     }
 
-
-
 }
+
+
+
+

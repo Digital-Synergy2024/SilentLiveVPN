@@ -116,10 +116,11 @@
     <Compile Include="Tools\Bouncy.cs" />
     <Compile Include="Tools\IpFetcher.cs" />
     <Compile Include="Tools\SimpleEncryptionBase.cs" />
+    <Compile Include="Tools\Timer.cs" />
     <Compile Include="VPN\CreateVPN.cs" />
     <Compile Include="VPN\OpenVPN.cs" />
-    <Compile Include="Tools\RasDialManager.cs" />
-    <Compile Include="Tools\RasDialWrapper.cs" />
+    <Compile Include="VPN\RasDialManager.cs" />
+    <Compile Include="VPN\RasDialWrapper.cs" />
     <Compile Include="Tools\shell.cs" />
     <Compile Include="Silent.cs">
       <SubType>Form</SubType>

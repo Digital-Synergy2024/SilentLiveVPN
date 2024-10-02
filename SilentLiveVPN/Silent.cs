@@ -11,12 +11,18 @@ using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Net;
 using System.Threading;
 using static SilentLiveVPN.RasDialWrapper;
 using static SilentLiveVPN.RasDialManager;
 using static SilentLiveVPN.Utilities;
 using static SilentLiveVPN.CreateVPN;
+//using Timer = System.Threading.Timer;
+using static SilentLiveVPN.Tools.ipFecthing;
 using Timer = System.Threading.Timer;
+//using Timer = System.Threading.Timer;
 
 namespace SilentLiveVPN
 { 
@@ -25,8 +31,10 @@ namespace SilentLiveVPN
     {
         public static Utilities Tools = new Utilities();
         public static CreateVPN createVPN = new CreateVPN();
+        public static Tools.GeoLocationChecker Geo = new Tools.GeoLocationChecker();
         Variables variables = new Variables();
         OpenVPNConnector OpenVPN = new OpenVPNConnector();
+        
         public static ContextMenuStrip menu = new ContextMenuStrip { AutoClose = false };
 
         public static ListBox listBoxOutPut;
@@ -37,14 +45,15 @@ namespace SilentLiveVPN
         public static Label SoftlblA;
         public static Label RadiallblA;
         public static Label labelGeoA;
-        public Silent()
+        public static Label labelGeoB;
+        public  Silent()
         {
             
             InitializeComponent();
             Sunisoft.IrisSkin.SkinEngine skin = new Sunisoft.IrisSkin.SkinEngine();
             skin.SkinAllForm = true;
             // var path = "..\\..\\s\\a (1).ssk";
-            skin.SkinFile = Environment.CurrentDirectory + @"\s\a (20).ssk";
+            skin.SkinFile = Environment.CurrentDirectory + @"\s\a (43).ssk";
             InitializeContextMenu();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             //Tools.LoadGiphyImage(pictureBox1);
@@ -67,38 +76,144 @@ namespace SilentLiveVPN
             CreateLineChart();
             OpenVPNConnector.LoanConfig(label4);
             listBoxOutPut = listBox2;
-            RadioButtonVPN1 = radioButton1;
-            RadioButtonVPN2 = radioButton2;
-            RadioButtonVPN3 = radioButton3;
+            //RadioButtonVPN1 = radioButton1;
+            //RadioButtonVPN2 = radioButton2;
+            //RadioButtonVPN3 = radioButton3;
+
             OpenVPNlblA = OpenVPNlbl;
             SoftlblA = softlbl;
             RadiallblA = radiallbl;
             labelGeoA = labelGeo;
-            StartChecking();
+            labelGeoB = label9;
+            radioButton1.CheckedChanged += RadioButton_CheckedChanged;
+            radioButton2.CheckedChanged += RadioButton_CheckedChanged;
+            radioButton3.CheckedChanged += RadioButton_CheckedChanged;
+            radioButton1.Checked = true;
+            RunOnThread();
+
         }
 
-        private Timer _timer;
-
-        public void StartChecking()
+        private async void RadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            // Set the timer to call the CheckGeoLocation method every 3 minutes (180000 ms)
-            _timer = new Timer(CheckGeoLocation, null, TimeSpan.Zero, TimeSpan.FromMinutes(3));
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton != null && radioButton.Checked)
+            {
+                //_ = StopChecking();
+                //_ = StartChecking();
+                
+                if (radioButton1.Checked)
+                {
+                    if (Tools.OpenVPN) {
+
+                        Tools.OpenVPN = false;
+                    
+                    } else {
+
+                        Tools.OpenVPN = true;
+                    }
+
+                }
+                else if (radioButton2.Checked) {
+
+
+                    if (Tools.Rasdial)
+                    {
+
+                        Tools.Rasdial = false;
+
+                    }
+                    else
+                    {
+
+                        Tools.Rasdial = true;
+                    }
+                }
+                else if (radioButton3.Checked) {
+
+
+                    if (Tools.SoftEther)
+                    {
+
+                        Tools.SoftEther = false;
+
+                    }
+                    else
+                    {
+
+                        Tools.SoftEther = true;
+                    }
+
+                }
+            }
         }
 
-        private async void CheckGeoLocation(object state)
+        public static async Task<bool> IsUserConnectedToVpnAsync()
         {
-            await RunIpFetcher();
+            string publicIp = await IpFetcher.GetPublicIpAsync();
+            if (publicIp == null) return false;
+
+            Silent instance = new Silent();
+            bool isVpn = VpnChecker.IsVpnIp(publicIp);
+
+            if (isVpn)
+            {
+                string geoInfo = await GeoLocationService.GetGeoLocationAsync(publicIp);
+                var geoData = JObject.Parse(geoInfo);
+                string filePath = "geodata.json";
+                //File.WriteAllText(filePath, string.Empty);
+
+                // Read existing data using StreamReader
+                JArray existingData;
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string existingJson = await reader.ReadToEndAsync();
+
+                        // Check if the JSON is an array or an object
+                        if (existingJson.Trim().StartsWith("["))
+                        {
+                            existingData = JArray.Parse(existingJson);
+                        }
+                        else if (existingJson.Trim().StartsWith("{"))
+                        {
+                            // If it's an object, you can convert it to an array or handle it accordingly
+                            JObject existingObject = JObject.Parse(existingJson);
+                            existingData = new JArray(existingObject);
+                        }
+                        else
+                        {
+                            throw new JsonReaderException("Invalid JSON format in geodata.json");
+                        }
+                    }
+                }
+                else
+                {
+                    existingData = new JArray();
+                }
+
+
+                // Append new geoData
+                existingData.Add(geoData);
+
+                // Write back to the file
+                using (StreamWriter file = new StreamWriter(filePath, false)) // 'false' to overwrite the file
+                {
+                    string updatedJson = JsonConvert.SerializeObject(existingData, Formatting.Indented);
+                    await file.WriteAsync(updatedJson);
+                }
+
+                return true; // User is connected to a VPN
+            }
+
+            return false; // User is not connected to a VPN
         }
 
-        public async Task RunIpFetcher()
-        {
-            await Tools.CheckIfVPNConnectedAsync();
-        }
 
-        public void StopChecking()
+        public async void RunOnThread()
         {
-            _timer?.Change(Timeout.Infinite, 0);
-            _timer?.Dispose();
+            //_ = Task.Run(async () => await Geo.StartIt());
+            await Geo.StartIt();
         }
 
         private void MyForm_Resize(object sender, EventArgs e)
@@ -117,14 +232,58 @@ namespace SilentLiveVPN
         public async void Option1_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 1 click
-            await Tools.Connect(listBox1, label1,  label2, label3, label5, listBox2, radioButton1, radioButton2, radioButton3);
+            if (Tools.OpenVPN)
+            {
+                await OpenVPN.AppendTextToOutput("Connecting...", listBox2);
+                await Tools.GetExternalIpAsync(label1);
+                await Tools.CallUpdateContextMenuAsync();
+                await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
+                //Tools.OpenVPN = false;
+            }
+            else if (Tools.Rasdial)
+            {
+                await OpenVPN.AppendTextToOutput("Connecting...", listBox2);
+                Tools.LoadAuthList(label3, label5);
+                await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
+                await Tools.GetExternalIpAsync(label1);
+                await Tools.CallUpdateContextMenuAsync();
+                //Tools.Rasdial = false;
+            }
+            else if (Tools.SoftEther)
+            {
+
+                Tools.LoadAuthList(label3, label5);
+                await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
+                await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
+                //Tools.SoftEther = false;
+            }
             menu.Close();
         }
 
         public async void Option2_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 2 click
-            await Tools.DisConnect(listBox2, label1, label2, label3, label5, radioButton1, radioButton2, radioButton3);
+            if (Tools.OpenVPN)
+            {
+                await Tools.TerminateProcess(variables.ProcessName);
+                //label1.Text = "No Connection";
+                await Tools.GetExternalIpAsync(label1);
+                await Tools.CallUpdateContextMenuAsync();
+                //OpenVPN = false;
+            }
+            else if (Tools.Rasdial)
+            {
+                await RasDialManager.DisconnectFromRas(listBox2);
+                await Tools.GetExternalIpAsync(label1);
+                await Tools.CallUpdateContextMenuAsync();
+                //Rasdial = false;
+            }
+            else if (Tools.SoftEther)
+            {
+                Tools.LoadAuthList(label3, label5);
+                await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
+                //SoftEther = true;
+            }
             menu.Close();
         }
 
@@ -144,24 +303,25 @@ namespace SilentLiveVPN
         {
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(label2.Text, null, Option3_Click);
+            menu.Items.Add(label1.Text, null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
         }
 
         public void UpdateContextMenu()
         {
             // Clear existing items and re-add them to reflect the updated label text
-            //menu.Items.Clear();
+            menu.Items.Clear();
+            _ = Tools.GetExternalIpAsync(label1);
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(label2.Text, null, Option3_Click);
+            menu.Items.Add(label1.Text, null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
-            notifyIcon1.Text = label2.Text;
+            notifyIcon1.Text = label1.Text;
         }
 
         public void removeConectMenuItem() {
 
-            RemoveMenuItem(label2.Text);
+            RemoveMenuItem(label1.Text);
         }
 
         private void RemoveMenuItem(string itemText)
@@ -238,7 +398,7 @@ namespace SilentLiveVPN
             {
                 // Simulate work (e.g., saving data, cleaning up resources)
                 await Tools.TerminateProcess("SIlentLiveVPN.exe");
-                System.Threading.Thread.Sleep(3000); // Simulate a delay
+                Thread.Sleep(3000); // Simulate a delay
             });
         }
 
@@ -319,15 +479,21 @@ namespace SilentLiveVPN
             await Tools.SaveUserInputToFileAsync(textBox1.Text, textBox2.Text);
             Tools.LoadAuthList(label3, label5);
         }
-        //statistics
+        //statistics 
         private async void button6_ClickAsync(object sender, EventArgs e)
         {
             lblBytesReceived.Visible = !lblBytesReceived.Visible;
             WifiName.Visible = !WifiName.Visible;
             lblBytesSent.Visible = !lblBytesSent.Visible;
+            label1.Visible = !label1.Visible;
+            label2.Visible = !label2.Visible;
+            label4.Visible = !label4.Visible;
             lblBytesSent.Enabled = true;
             WifiName.Enabled = true;
             lblBytesReceived.Enabled = true;
+            label4.Enabled = true;
+            label1.Enabled = true;
+            label2.Enabled = true;
             await Tools.GetExternalIpAsync(label1);
         }
 
@@ -341,7 +507,7 @@ namespace SilentLiveVPN
         private async void button3_Click_1(object sender, EventArgs e)
         {
             bool isTaken = createVPN.IsVpnNameTaken(variables.VpnNameToCheck);
-
+            //ReadGeoData();
             if (isTaken)
             {
                 MessageBox.Show($"The VPN is already setup.");

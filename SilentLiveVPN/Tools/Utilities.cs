@@ -10,14 +10,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
 using static SilentLiveVPN.Tools.ipFecthing;
+using Newtonsoft.Json.Linq;
+using System.Threading;
+using Timer = System.Windows.Forms.Timer;
+
 namespace SilentLiveVPN
 {
     public class Utilities
     {
+        CancellationTokenSource cts = new CancellationTokenSource();
         OpenVPNConnector connector = new OpenVPNConnector();
+        public static Silent silent = new Silent();
+        public static Tools.GeoLocationChecker GeoA = new Tools.GeoLocationChecker();
+        public static bool isConnected = false;
+        public bool OpenVPN = true;
+        public bool Rasdial = true;
+        public bool SoftEther = true;
         public class Variables
         {
             public Timer updateTimer;
+            public Timer updateGeoData;
             public float bytesSent;
             public float bytesReceived;
             public int counter = 0;
@@ -28,6 +40,7 @@ namespace SilentLiveVPN
             public Variables()
             {
                 updateTimer = new Timer();
+                updateGeoData = new Timer();
             }
 
             public string SelectedVPN { get; set; }
@@ -69,9 +82,23 @@ namespace SilentLiveVPN
             variables = new Variables();
         }
 
+        public void StopTimers()
+        {
+            variables.updateTimer.Stop();
+            variables.updateGeoData.Stop();
+            variables.updateTimer.Dispose();
+            variables.updateGeoData.Dispose();
+        }
+
 
         public void InitializeTimer(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
         {
+
+            /*GeoData*/
+            variables.updateGeoData.Interval = 10000; // Update 
+            variables.updateGeoData.Tick += async (sender, e) => await UpdateGeoDataTimer_TickAsync(sender, e);
+            variables.updateGeoData.Start();
+
             variables.updateTimer.Interval = 1000; // Update every second
             variables.updateTimer.Tick += async (sender, e) => await UpdateTimer_TickAsync(sender, e, chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5);
             variables.updateTimer.Start();
@@ -79,11 +106,10 @@ namespace SilentLiveVPN
 
         public async Task CheckIfVPNConnectedAsync() {
 
- 
             try {
-
-                await VpnDetection.IsUserConnectedToVpnAsync();
-
+                //await connector.AppendTextToOutput($"Starting IPFetcher 3", Silent.listBoxOutPut);
+                //await VpnDetection.IsUserConnectedToVpnAsync();
+                //await Silent.IsUserConnectedToVpnAsync();
 
             } catch(Exception ex) {
 
@@ -92,54 +118,133 @@ namespace SilentLiveVPN
 
         }
 
+        public async Task UpdateGeoDataTimer_TickAsync(object sender, EventArgs e) {
+
+            var token = cts.Token;
+            //_= Task.Run(async () => await ReadGeoDataAsync(token));
+            await ReadGeoDataAsync(token);
+        }
+
         public async Task UpdateTimer_TickAsync(object sender, EventArgs e, Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
         {
+            PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
+            bool instancethere = true;
+            string instance2 = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[0] : string.Empty;
+            string instance = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[1] : string.Empty;
+            if (string.IsNullOrEmpty(instance))
+            {
+                WifiName.Text = "No Network Interface Found";
+                return;
+            }
 
-                PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
-                bool instancethere = true;
-                string instance2 = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[0] : string.Empty;
-                string instance = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[1] : string.Empty;                
-                if (string.IsNullOrEmpty(instance))
+            string ethernetAdapterName = string.Empty;
+            string wifiAdapterName = string.Empty;
+
+            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet && adapter.OperationalStatus == OperationalStatus.Up)
                 {
-                    WifiName.Text = "No Network Interface Found";
-                    return;
+                    ethernetAdapterName = adapter.Name;
+                    instancethere = false;
                 }
-
-                string ethernetAdapterName = string.Empty;
-                string wifiAdapterName = string.Empty;
-
-                foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
+                else if (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && adapter.OperationalStatus == OperationalStatus.Up)
                 {
-                    if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet && adapter.OperationalStatus == OperationalStatus.Up)
-                    {
-                        ethernetAdapterName = adapter.Name;
-                        instancethere = false;
-                    }
-                    else if (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && adapter.OperationalStatus == OperationalStatus.Up)
-                    {
-                        wifiAdapterName = adapter.Name;
-                    }
+                    wifiAdapterName = adapter.Name;
                 }
+            }
 
-                WifiName.Text = !string.IsNullOrEmpty(ethernetAdapterName) ? $"Ethernet Adapter Name: {ethernetAdapterName}" :
-                                !string.IsNullOrEmpty(wifiAdapterName) ? $"WiFi Adapter Name: {wifiAdapterName}" :
-                                "No Active Network Adapters";
+            WifiName.Text = !string.IsNullOrEmpty(ethernetAdapterName) ? $"Ethernet Adapter Name: {ethernetAdapterName}" :
+                            !string.IsNullOrEmpty(wifiAdapterName) ? $"WiFi Adapter Name: {wifiAdapterName}" :
+                            "No Active Network Adapters";
 
-                PerformanceCounter bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancethere ? instance : instance2);
-                PerformanceCounter bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancethere ? instance : instance2);
+            PerformanceCounter bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancethere ? instance : instance2);
+            PerformanceCounter bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancethere ? instance : instance2);
 
-                for (int i = 0; i < 10; ++i)
-                {
-                    variables.bytesSent = bytesSentCounter.NextValue();
-                    variables.bytesReceived = bytesReceivedCounter.NextValue();
-                    lblBytesSent.Text = $"Bytes Sent: {variables.bytesSent / 1024} KB";
-                    lblBytesReceived.Text = $"Bytes Received: {variables.bytesReceived / 1024} KB";
-                    chart1.Series["Bytes Sent"].Points.AddXY(variables.counter++, variables.bytesSent / 1024);
-                    chart1.Series["Bytes Received"].Points.AddXY(variables.counter++, variables.bytesReceived / 1024);
-                    
-                }
-                await GetExternalIpAsync(label1);
-                LoadAuthList(label3, label5);
+            for (int i = 0; i < 10; ++i)
+            {
+                variables.bytesSent = bytesSentCounter.NextValue();
+                variables.bytesReceived = bytesReceivedCounter.NextValue();
+                lblBytesSent.Text = $"Bytes Sent: {variables.bytesSent / 1024} KB";
+                lblBytesReceived.Text = $"Bytes Received: {variables.bytesReceived / 1024} KB";
+                chart1.Series["Bytes Sent"].Points.AddXY(variables.counter++, variables.bytesSent / 1024);
+                chart1.Series["Bytes Received"].Points.AddXY(variables.counter++, variables.bytesReceived / 1024);
+
+            }
+
+            await GetExternalIpAsync(label1);
+            LoadAuthList(label3, label5);
+        }
+
+        public async Task ReadGeoDataAsync(CancellationToken token)
+        {
+            string filePath = "geodata.json";
+
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string existingJson = await reader.ReadToEndAsync();
+
+                JArray readGeoDataArray = JArray.Parse(existingJson);
+                JObject readGeoData = (JObject)readGeoDataArray[0];
+                // Parse the JSON data
+                //JObject readGeoData = JObject.Parse(existingJson);
+                string latitude = readGeoData["geoplugin_latitude"].ToString();
+                string longitude = readGeoData["geoplugin_longitude"].ToString();
+                string country = readGeoData["geoplugin_countryName"].ToString();
+                string city = readGeoData["geoplugin_city"].ToString();
+                string state = readGeoData["geoplugin_regionCode"].ToString();
+
+                // Update UI elements safely
+                UpdateUI(latitude, longitude, country, city, state);
+            }
+
+        }
+
+        private void UpdateUI(string latitude, string longitude, string country, string city, string state)
+        {
+            if (Silent.labelGeoA.IsHandleCreated)
+            {
+                Silent.labelGeoA.BeginInvoke((MethodInvoker)delegate {
+                    Silent.labelGeoA.Text = $"GeoLocation: {latitude} / {longitude}";
+                    Silent.labelGeoA.ForeColor = Color.FromArgb(255, 0, 0);
+                });
+            }
+
+            if (Silent.labelGeoB.IsHandleCreated)
+            {
+                Silent.labelGeoB.BeginInvoke((MethodInvoker)delegate {
+                    Silent.labelGeoB.Text = $"Country: {country} / City: {city} / ST: {state}";
+                    Silent.labelGeoB.ForeColor = Color.FromArgb(255, 0, 0);
+                });
+            }
+
+            UpdateConnectionStatus();
+        }
+
+        private void UpdateConnectionStatus()
+        {
+            if (Silent.OpenVPNlblA.IsHandleCreated)
+            {
+                Silent.OpenVPNlblA.BeginInvoke((MethodInvoker)delegate {
+                    Silent.OpenVPNlblA.Text = OpenVPN ? "Connected" : "Disconnected";
+                    Silent.OpenVPNlblA.ForeColor = OpenVPN ? Color.FromArgb(28, 168, 25) : Color.FromArgb(255, 0, 0);
+                });
+            }
+
+            if (Silent.RadiallblA.IsHandleCreated)
+            {
+                Silent.RadiallblA.BeginInvoke((MethodInvoker)delegate {
+                    Silent.RadiallblA.Text = Rasdial ? "Connected" : "Disconnected";
+                    Silent.RadiallblA.ForeColor = Rasdial ? Color.FromArgb(28, 168, 25) : Color.FromArgb(255, 0, 0);
+                });
+            }
+
+            if (Silent.SoftlblA.IsHandleCreated)
+            {
+                Silent.SoftlblA.BeginInvoke((MethodInvoker)delegate {
+                    Silent.SoftlblA.Text = SoftEther ? "Connected" : "Disconnected";
+                    Silent.SoftlblA.ForeColor = SoftEther ? System.Drawing.Color.FromArgb(28, 168, 25) : System.Drawing.Color.FromArgb(255, 0, 0);
+                });
+            }
         }
 
         public async Task GetExternalIpAsync(Label label1)
@@ -158,7 +263,6 @@ namespace SilentLiveVPN
                 }
             }
         }
-
 
         public void LoadDataIntoListBox(ListBox listBox1)
         {
@@ -306,17 +410,22 @@ namespace SilentLiveVPN
             // If you need to perform additional asynchronous operations, you can await them here
             await Task.Delay(100); // Simulating an asynchronous operation
         }
+        //public static Silent silent = new Silent();
+
 
         public async Task Connect(ListBox listBox1, Label label1, Label label2, Label label3, Label label5, ListBox listBox2, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3) {
 
             try {
-                
+                //Utilities.isConnected = true;
                 if (radioButton1.Checked)
                 {
                     await connector.AppendTextToOutput("Connecting...", listBox2);
-                    await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
                     await GetExternalIpAsync(label1);
+                    //await GeoA.StartTimer();
                     await CallUpdateContextMenuAsync();
+                    await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
+
+                    //OpenVPN = false;
                 }
                 else if (radioButton2.Checked)
                 {
@@ -325,13 +434,15 @@ namespace SilentLiveVPN
                     await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
+                    //Rasdial = false;
                 }
                 else if (radioButton3.Checked) {
 
                     LoadAuthList(label3, label5);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
-
+                    await CallUpdateContextMenuAsync();
+                    //SoftEther = false; 
                 }
                 
             }
@@ -345,25 +456,27 @@ namespace SilentLiveVPN
         public async Task DisConnect(ListBox listBox2, Label label1, Label label2, Label label3, Label label5, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3)
         {
             try {
-                MessageBox.Show($"Test", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 if (radioButton1.Checked)
                 {
                     await TerminateProcess(variables.ProcessName);
-                    label2.Text = "No Connection";
+                    //label1.Text = "No Connection";
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
+                    //OpenVPN = false;
                 }
                 else if (radioButton2.Checked)
                 {
                     await RasDialManager.DisconnectFromRas(listBox2);
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
+                    //Rasdial = false;
                 }
                 else if (radioButton3.Checked)
                 {
                     LoadAuthList(label3, label5);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
-                    
+                    //SoftEther = true;
                 }
             }
             catch (Exception ex)

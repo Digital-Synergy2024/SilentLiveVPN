@@ -76,6 +76,10 @@
             this.softlbl = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.labelGeo = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -100,7 +104,7 @@
             // 
             // listBox1
             // 
-            this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.listBox1.BackColor = System.Drawing.Color.Black;
             this.listBox1.ForeColor = System.Drawing.Color.Red;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 22;
@@ -117,10 +121,11 @@
             // lblBytesSent
             // 
             this.lblBytesSent.AutoSize = true;
-            this.lblBytesSent.BackColor = System.Drawing.Color.Lime;
+            this.lblBytesSent.BackColor = System.Drawing.Color.Transparent;
             this.lblBytesSent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBytesSent.Enabled = false;
             this.lblBytesSent.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBytesSent.ForeColor = System.Drawing.Color.Red;
             this.lblBytesSent.Location = new System.Drawing.Point(3, 3);
             this.lblBytesSent.Name = "lblBytesSent";
             this.lblBytesSent.Size = new System.Drawing.Size(74, 24);
@@ -131,10 +136,11 @@
             // lblBytesReceived
             // 
             this.lblBytesReceived.AutoSize = true;
-            this.lblBytesReceived.BackColor = System.Drawing.Color.Lime;
+            this.lblBytesReceived.BackColor = System.Drawing.Color.Transparent;
             this.lblBytesReceived.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBytesReceived.Enabled = false;
             this.lblBytesReceived.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBytesReceived.ForeColor = System.Drawing.Color.Red;
             this.lblBytesReceived.Location = new System.Drawing.Point(3, 25);
             this.lblBytesReceived.Name = "lblBytesReceived";
             this.lblBytesReceived.Size = new System.Drawing.Size(74, 24);
@@ -145,10 +151,11 @@
             // WifiName
             // 
             this.WifiName.AutoSize = true;
-            this.WifiName.BackColor = System.Drawing.Color.Lime;
+            this.WifiName.BackColor = System.Drawing.Color.Transparent;
             this.WifiName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.WifiName.Enabled = false;
             this.WifiName.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WifiName.ForeColor = System.Drawing.Color.Red;
             this.WifiName.Location = new System.Drawing.Point(3, 47);
             this.WifiName.Name = "WifiName";
             this.WifiName.Size = new System.Drawing.Size(160, 24);
@@ -218,27 +225,32 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Lime;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Enabled = false;
             this.label1.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(3, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(75, 24);
             this.label1.TabIndex = 11;
             this.label1.Text = "Your IP:";
+            this.label1.Visible = false;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Lime;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label2.Enabled = false;
             this.label2.Font = new System.Drawing.Font("Sylfaen", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Red;
             this.label2.Location = new System.Drawing.Point(2, 91);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(149, 27);
             this.label2.TabIndex = 13;
             this.label2.Text = "Connected TO:";
+            this.label2.Visible = false;
             // 
             // tabControl1
             // 
@@ -388,6 +400,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.BackColor = System.Drawing.Color.Black;
             this.tabPage3.Controls.Add(this.label4);
             this.tabPage3.Controls.Add(this.lblBytesSent);
             this.tabPage3.Controls.Add(this.label2);
@@ -400,19 +413,21 @@
             this.tabPage3.Size = new System.Drawing.Size(334, 157);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistics";
-            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Lime;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label4.Enabled = false;
             this.label4.Font = new System.Drawing.Font("Sylfaen", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(2, 118);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(121, 27);
             this.label4.TabIndex = 14;
             this.label4.Text = "ConfigVPN:";
+            this.label4.Visible = false;
             // 
             // tabPage4
             // 
@@ -491,7 +506,7 @@
             // 
             this.listBox2.BackColor = System.Drawing.SystemColors.InfoText;
             this.listBox2.Font = new System.Drawing.Font("Sylfaen", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBox2.ForeColor = System.Drawing.SystemColors.Window;
+            this.listBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.listBox2.FormattingEnabled = true;
             this.listBox2.HorizontalScrollbar = true;
             this.listBox2.ItemHeight = 25;
@@ -536,41 +551,44 @@
             // OpenVPNlbl
             // 
             this.OpenVPNlbl.AutoSize = true;
-            this.OpenVPNlbl.BackColor = System.Drawing.Color.Red;
+            this.OpenVPNlbl.BackColor = System.Drawing.Color.Transparent;
             this.OpenVPNlbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.OpenVPNlbl.Enabled = false;
-            this.OpenVPNlbl.Font = new System.Drawing.Font("Sylfaen", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OpenVPNlbl.Location = new System.Drawing.Point(12, 229);
+            this.OpenVPNlbl.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.OpenVPNlbl.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenVPNlbl.ForeColor = System.Drawing.Color.White;
+            this.OpenVPNlbl.Location = new System.Drawing.Point(97, 207);
             this.OpenVPNlbl.Name = "OpenVPNlbl";
-            this.OpenVPNlbl.Size = new System.Drawing.Size(206, 24);
+            this.OpenVPNlbl.Size = new System.Drawing.Size(111, 21);
             this.OpenVPNlbl.TabIndex = 19;
-            this.OpenVPNlbl.Text = "OpenVPN: Not Connected";
+            this.OpenVPNlbl.Text = "Not Connected";
             // 
             // radiallbl
             // 
             this.radiallbl.AutoSize = true;
-            this.radiallbl.BackColor = System.Drawing.Color.Red;
+            this.radiallbl.BackColor = System.Drawing.Color.Transparent;
             this.radiallbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.radiallbl.Enabled = false;
+            this.radiallbl.Cursor = System.Windows.Forms.Cursors.Cross;
             this.radiallbl.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radiallbl.Location = new System.Drawing.Point(12, 253);
+            this.radiallbl.ForeColor = System.Drawing.SystemColors.Control;
+            this.radiallbl.Location = new System.Drawing.Point(97, 229);
             this.radiallbl.Name = "radiallbl";
-            this.radiallbl.Size = new System.Drawing.Size(171, 21);
+            this.radiallbl.Size = new System.Drawing.Size(111, 21);
             this.radiallbl.TabIndex = 20;
-            this.radiallbl.Text = "Rasdial: Not Connected";
+            this.radiallbl.Text = "Not Connected";
             // 
             // softlbl
             // 
             this.softlbl.AutoSize = true;
-            this.softlbl.BackColor = System.Drawing.Color.Red;
+            this.softlbl.BackColor = System.Drawing.Color.Transparent;
             this.softlbl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.softlbl.Enabled = false;
+            this.softlbl.Cursor = System.Windows.Forms.Cursors.Cross;
             this.softlbl.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.softlbl.Location = new System.Drawing.Point(12, 277);
+            this.softlbl.ForeColor = System.Drawing.Color.White;
+            this.softlbl.Location = new System.Drawing.Point(93, 250);
             this.softlbl.Name = "softlbl";
-            this.softlbl.Size = new System.Drawing.Size(184, 21);
+            this.softlbl.Size = new System.Drawing.Size(111, 21);
             this.softlbl.TabIndex = 21;
-            this.softlbl.Text = "SoftEther: Not Connected";
+            this.softlbl.Text = "Not Connected";
             // 
             // label11
             // 
@@ -587,15 +605,69 @@
             // labelGeo
             // 
             this.labelGeo.AutoSize = true;
-            this.labelGeo.BackColor = System.Drawing.Color.Chartreuse;
+            this.labelGeo.BackColor = System.Drawing.Color.Transparent;
             this.labelGeo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelGeo.Enabled = false;
-            this.labelGeo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGeo.Location = new System.Drawing.Point(12, 298);
+            this.labelGeo.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.labelGeo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.labelGeo.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelGeo.Location = new System.Drawing.Point(12, 271);
             this.labelGeo.Name = "labelGeo";
-            this.labelGeo.Size = new System.Drawing.Size(97, 21);
+            this.labelGeo.Size = new System.Drawing.Size(129, 26);
             this.labelGeo.TabIndex = 25;
             this.labelGeo.Text = "GeoLocation";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(12, 207);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(79, 21);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "OpenVPN";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label7.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(12, 229);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 21);
+            this.label7.TabIndex = 27;
+            this.label7.Text = "Rasdial";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label8.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(12, 250);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(75, 21);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "SoftEther";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label9.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.label9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.label9.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(12, 297);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(75, 26);
+            this.label9.TabIndex = 29;
+            this.label9.Text = "Region";
             // 
             // Silent
             // 
@@ -603,6 +675,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1397, 802);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.labelGeo);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.softlbl);
@@ -679,11 +755,15 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Label OpenVPNlbl;
-        private System.Windows.Forms.Label radiallbl;
-        private System.Windows.Forms.Label softlbl;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label labelGeo;
+        public System.Windows.Forms.Label OpenVPNlbl;
+        public System.Windows.Forms.Label radiallbl;
+        public System.Windows.Forms.Label softlbl;
+        public System.Windows.Forms.Label labelGeo;
+        public System.Windows.Forms.Label label6;
+        public System.Windows.Forms.Label label7;
+        public System.Windows.Forms.Label label8;
+        public System.Windows.Forms.Label label9;
     }
 }
 
