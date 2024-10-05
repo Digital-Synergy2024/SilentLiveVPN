@@ -229,6 +229,64 @@ namespace SilentLiveVPN
         {
             try
             {
+                string encryptionMethod = GetEncryptionMethod(configFilePath);
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = openVpnPath,
+                    Arguments = $"--config \"{configFilePath}\" --auth-user-pass \"{authFilePath}\" --data-ciphers {encryptionMethod}",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using (Process process = new Process { StartInfo = startInfo })
+                {
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            listBox2.Invoke((MethodInvoker)async delegate
+                            {
+                                await AppendTextToOutput(e.Data, listBox2);
+                            });
+                        }
+                    };
+
+                    process.ErrorDataReceived += async (sender, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            listBox2.Invoke((MethodInvoker)async delegate
+                            {
+                                await AppendTextToOutput("Error: " + e.Data, listBox2);
+                            });
+                        }
+                    };
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    // Await the process completion in a non-blocking manner
+                    await Task.Run(() => process.WaitForExit());
+                }
+            }
+            catch (Exception ex)
+            {
+                listBox2.Invoke((MethodInvoker)async delegate
+                {
+                    await AppendTextToOutput($"An error occurred: {ex.Message} - {ex.StackTrace}", listBox2);
+                });
+            }
+        }
+
+
+        /*public async Task StartConnection(string openVpnPath, string authFilePath, ListBox listBox2)
+        {
+            try
+            {
                 //AddAllEncryptionMethods(configFilePath);
                 // Get the encryption method from the .ovpn file  GetEncMethodHttp
                 string encryptionMethod = GetEncryptionMethod(configFilePath);
@@ -276,7 +334,7 @@ namespace SilentLiveVPN
             {
                 await AppendTextToOutput("An error occurred: " + ex.Message, listBox2);
             }
-        }
+        }*/
 
         public void OpenVPNConnect(string configFile)
         {

@@ -9,10 +9,10 @@ using System.Net.Http.Headers;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
-using static SilentLiveVPN.Tools.ipFecthing;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using Timer = System.Windows.Forms.Timer;
+using Newtonsoft.Json;
 
 namespace SilentLiveVPN
 {
@@ -21,11 +21,13 @@ namespace SilentLiveVPN
         CancellationTokenSource cts = new CancellationTokenSource();
         OpenVPNConnector connector = new OpenVPNConnector();
         public static Silent silent = new Silent();
-        public static Tools.GeoLocationChecker GeoA = new Tools.GeoLocationChecker();
         public static bool isConnected = false;
-        public bool OpenVPN = true;
-        public bool Rasdial = true;
-        public bool SoftEther = true;
+ 
+        public string ExternalIP = "";
+
+        // Assuming these boolean variables are defined at the class level
+
+
         public class Variables
         {
             public Timer updateTimer;
@@ -36,7 +38,9 @@ namespace SilentLiveVPN
             public string processName = "openvpn";
             public string username;
             public string nic;
-
+            public static bool OpenVPN { get; set; }
+            public static bool Rasdial { get; set; }
+            public static bool SoftEther { get; set; }
             public Variables()
             {
                 updateTimer = new Timer();
@@ -73,6 +77,7 @@ namespace SilentLiveVPN
                 set { counter = value; }
             }
 
+
         }
 
         private Variables variables;
@@ -91,38 +96,84 @@ namespace SilentLiveVPN
         }
 
 
-        public void InitializeTimer(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
+        public void InitializeTimer(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5, Label labelGeo, Label label9)
         {
 
             /*GeoData*/
-            variables.updateGeoData.Interval = 10000; // Update 
-            variables.updateGeoData.Tick += async (sender, e) => await UpdateGeoDataTimer_TickAsync(sender, e);
+            variables.updateGeoData.Interval = 30000; // Update 
+            variables.updateGeoData.Tick += async (sender, e) => await UpdateGeoDataTimer_TickAsync(sender, e, labelGeo, label9);
             variables.updateGeoData.Start();
 
-            variables.updateTimer.Interval = 1000; // Update every second
+            variables.updateTimer.Interval = 5000; // Update every second
             variables.updateTimer.Tick += async (sender, e) => await UpdateTimer_TickAsync(sender, e, chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5);
             variables.updateTimer.Start();
         }
 
-        public async Task CheckIfVPNConnectedAsync() {
+        public void UpdateUI(string latitude, string longitude, string country, string city, string state, Label labelGeo, Label label9)
+        {
+            if (labelGeo.IsHandleCreated)
+            {
+                labelGeo.Invoke((MethodInvoker)async delegate {
+                    labelGeo.Text = $"GeoLocation: {latitude} / {longitude}";
+                    labelGeo.ForeColor = Color.FromArgb(255, 0, 0);
+                });
+            }
 
-            try {
-                //await connector.AppendTextToOutput($"Starting IPFetcher 3", Silent.listBoxOutPut);
-                //await VpnDetection.IsUserConnectedToVpnAsync();
-                //await Silent.IsUserConnectedToVpnAsync();
-
-            } catch(Exception ex) {
-
-                MessageBox.Show($"An error occurred GeoLocation: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (label9.IsHandleCreated)
+            {
+                label9.Invoke((MethodInvoker)async delegate {
+                    label9.Text = $"Country: {country} / City: {city} / ST: {state}";
+                    label9.ForeColor = Color.FromArgb(255, 0, 0);
+                });
             }
 
         }
 
-        public async Task UpdateGeoDataTimer_TickAsync(object sender, EventArgs e) {
+        private const string GeoPluginUrl = "http://www.geoplugin.net/json.gp?ip=";
+        public async void ReadGeoDataAsync(Label labelGeo, Label label9)
+        {
+            try
+            {
+                string externalIp = await GetExternalIpAddressAsync();
+                string requestUrl = $"{GeoPluginUrl}{externalIp}";
 
-            var token = cts.Token;
-            //_= Task.Run(async () => await ReadGeoDataAsync(token));
-            await ReadGeoDataAsync(token);
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(requestUrl);
+                    response.EnsureSuccessStatusCode();
+
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    JObject readGeoData = JObject.Parse(jsonResponse);
+
+                    // Extract geo-location details
+                    string latitude = readGeoData["geoplugin_latitude"]?.ToString() ?? "N/A";
+                    string longitude = readGeoData["geoplugin_longitude"]?.ToString() ?? "N/A";
+                    string country = readGeoData["geoplugin_countryName"]?.ToString() ?? "N/A";
+                    string city = readGeoData["geoplugin_city"]?.ToString() ?? "N/A";
+                    string state = readGeoData["geoplugin_regionCode"]?.ToString() ?? "N/A";
+
+                    // Update UI elements safely
+                    UpdateUI(latitude, longitude, country, city, state, labelGeo, label9);
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                MessageBox.Show($"Error retrieving geo-location data: {httpEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (JsonException jsonEx)
+            {
+                MessageBox.Show($"Error parsing geo-location data: {jsonEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public async Task UpdateGeoDataTimer_TickAsync(object sender, EventArgs e, Label labelGeo, Label label9) {
+
+            ReadGeoDataAsync(labelGeo, label9);
         }
 
         public async Task UpdateTimer_TickAsync(object sender, EventArgs e, Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
@@ -175,75 +226,21 @@ namespace SilentLiveVPN
             LoadAuthList(label3, label5);
         }
 
-        public async Task ReadGeoDataAsync(CancellationToken token)
+        public static async Task<string> GetExternalIpAddressAsync()
         {
-            string filePath = "geodata.json";
-
-            using (StreamReader reader = new StreamReader(filePath))
+            using (HttpClient client = new HttpClient())
             {
-                string existingJson = await reader.ReadToEndAsync();
-
-                JArray readGeoDataArray = JArray.Parse(existingJson);
-                JObject readGeoData = (JObject)readGeoDataArray[0];
-                // Parse the JSON data
-                //JObject readGeoData = JObject.Parse(existingJson);
-                string latitude = readGeoData["geoplugin_latitude"].ToString();
-                string longitude = readGeoData["geoplugin_longitude"].ToString();
-                string country = readGeoData["geoplugin_countryName"].ToString();
-                string city = readGeoData["geoplugin_city"].ToString();
-                string state = readGeoData["geoplugin_regionCode"].ToString();
-
-                // Update UI elements safely
-                UpdateUI(latitude, longitude, country, city, state);
-            }
-
-        }
-
-        private void UpdateUI(string latitude, string longitude, string country, string city, string state)
-        {
-            if (Silent.labelGeoA.IsHandleCreated)
-            {
-                Silent.labelGeoA.BeginInvoke((MethodInvoker)delegate {
-                    Silent.labelGeoA.Text = $"GeoLocation: {latitude} / {longitude}";
-                    Silent.labelGeoA.ForeColor = Color.FromArgb(255, 0, 0);
-                });
-            }
-
-            if (Silent.labelGeoB.IsHandleCreated)
-            {
-                Silent.labelGeoB.BeginInvoke((MethodInvoker)delegate {
-                    Silent.labelGeoB.Text = $"Country: {country} / City: {city} / ST: {state}";
-                    Silent.labelGeoB.ForeColor = Color.FromArgb(255, 0, 0);
-                });
-            }
-
-            UpdateConnectionStatus();
-        }
-
-        private void UpdateConnectionStatus()
-        {
-            if (Silent.OpenVPNlblA.IsHandleCreated)
-            {
-                Silent.OpenVPNlblA.BeginInvoke((MethodInvoker)delegate {
-                    Silent.OpenVPNlblA.Text = OpenVPN ? "Connected" : "Disconnected";
-                    Silent.OpenVPNlblA.ForeColor = OpenVPN ? Color.FromArgb(28, 168, 25) : Color.FromArgb(255, 0, 0);
-                });
-            }
-
-            if (Silent.RadiallblA.IsHandleCreated)
-            {
-                Silent.RadiallblA.BeginInvoke((MethodInvoker)delegate {
-                    Silent.RadiallblA.Text = Rasdial ? "Connected" : "Disconnected";
-                    Silent.RadiallblA.ForeColor = Rasdial ? Color.FromArgb(28, 168, 25) : Color.FromArgb(255, 0, 0);
-                });
-            }
-
-            if (Silent.SoftlblA.IsHandleCreated)
-            {
-                Silent.SoftlblA.BeginInvoke((MethodInvoker)delegate {
-                    Silent.SoftlblA.Text = SoftEther ? "Connected" : "Disconnected";
-                    Silent.SoftlblA.ForeColor = SoftEther ? System.Drawing.Color.FromArgb(28, 168, 25) : System.Drawing.Color.FromArgb(255, 0, 0);
-                });
+                try
+                {
+                    // Requesting the external IP from a reliable service
+                    string ipAddress = await client.GetStringAsync("https://api.ipify.org");
+                    return ipAddress;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An unexpected error occurred For External IP: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
             }
         }
 
@@ -253,8 +250,8 @@ namespace SilentLiveVPN
             {
                 try
                 {
-                    string ip = await client.GetStringAsync("http://api.ipify.org");
-                    label1.Text = $"Your External IP: {ip}";
+                    ExternalIP = await client.GetStringAsync("http://api.ipify.org");
+                    label1.Text = $"Your External IP: {ExternalIP}";
 
                 }
                 catch (Exception ex)
@@ -312,11 +309,11 @@ namespace SilentLiveVPN
             }
             catch (FileNotFoundException )
             {
-                //Console.WriteLine($"Error: The file '{filePath}' was not found. {ex.Message}");
+                
             }
-            catch (Exception )
+            catch (Exception)
             {
-                //Console.WriteLine($"An error occurred: {ex.Message}");
+                
             }
 
         }
@@ -417,32 +414,28 @@ namespace SilentLiveVPN
 
             try {
                 //Utilities.isConnected = true;
-                if (radioButton1.Checked)
+                if (Variables.OpenVPN)
                 {
                     await connector.AppendTextToOutput("Connecting...", listBox2);
                     await GetExternalIpAsync(label1);
-                    //await GeoA.StartTimer();
                     await CallUpdateContextMenuAsync();
                     await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
-
-                    //OpenVPN = false;
                 }
-                else if (radioButton2.Checked)
+                else if (Variables.Rasdial)
                 {
                     await connector.AppendTextToOutput("Connecting...", listBox2);
                     LoadAuthList(label3, label5);
                     await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
-                    //Rasdial = false;
                 }
-                else if (radioButton3.Checked) {
+                else if (Variables.SoftEther) {
 
                     LoadAuthList(label3, label5);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
+                    await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
-                    //SoftEther = false; 
                 }
                 
             }
@@ -457,26 +450,23 @@ namespace SilentLiveVPN
         {
             try {
 
-                if (radioButton1.Checked)
+                if(Variables.OpenVPN)
                 {
                     await TerminateProcess(variables.ProcessName);
-                    //label1.Text = "No Connection";
+                    label1.Text = "No Connection";
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
-                    //OpenVPN = false;
                 }
-                else if (radioButton2.Checked)
+                else if (Variables.Rasdial)
                 {
                     await RasDialManager.DisconnectFromRas(listBox2);
                     await GetExternalIpAsync(label1);
                     await CallUpdateContextMenuAsync();
-                    //Rasdial = false;
                 }
-                else if (radioButton3.Checked)
+                else if (Variables.SoftEther)
                 {
                     LoadAuthList(label3, label5);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
-                    //SoftEther = true;
                 }
             }
             catch (Exception ex)

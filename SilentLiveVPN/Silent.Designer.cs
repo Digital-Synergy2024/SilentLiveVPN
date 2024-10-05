@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Silent));
             this.button1 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -180,21 +180,21 @@
             this.chart1.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.DiagonalRight;
             this.chart1.BorderlineColor = System.Drawing.SystemColors.ControlDark;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
             this.chart1.DataSource = this.silentBindingSource;
             this.chart1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.chart1.Enabled = false;
             this.chart1.ImeMode = System.Windows.Forms.ImeMode.Off;
-            legend1.Name = "Legend";
-            this.chart1.Legends.Add(legend1);
+            legend3.Name = "Legend";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(0, 502);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend";
-            series1.Name = "Legend";
-            this.chart1.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend";
+            series3.Name = "Legend";
+            this.chart1.Series.Add(series3);
             this.chart1.Size = new System.Drawing.Size(1397, 300);
             this.chart1.TabIndex = 9;
             this.chart1.Text = "chart1";
@@ -316,6 +316,7 @@
             this.radioButton3.Size = new System.Drawing.Size(89, 26);
             this.radioButton3.TabIndex = 19;
             this.radioButton3.TabStop = true;
+            this.radioButton3.Tag = "SoftEther";
             this.radioButton3.Text = "SoftEther";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
@@ -362,6 +363,7 @@
             this.radioButton2.Size = new System.Drawing.Size(108, 26);
             this.radioButton2.TabIndex = 15;
             this.radioButton2.TabStop = true;
+            this.radioButton2.Tag = "Rasdial";
             this.radioButton2.Text = "RasdialVPN";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
@@ -373,6 +375,7 @@
             this.radioButton1.Size = new System.Drawing.Size(95, 26);
             this.radioButton1.TabIndex = 14;
             this.radioButton1.TabStop = true;
+            this.radioButton1.Tag = "OpenVPN";
             this.radioButton1.Text = "OpenVPN";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 

@@ -114,9 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tools\Bouncy.cs" />
-    <Compile Include="Tools\IpFetcher.cs" />
     <Compile Include="Tools\SimpleEncryptionBase.cs" />
-    <Compile Include="Tools\Timer.cs" />
     <Compile Include="VPN\CreateVPN.cs" />
     <Compile Include="VPN\OpenVPN.cs" />
     <Compile Include="VPN\RasDialManager.cs" />
@@ -203,7 +201,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SilentLiveVPN_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

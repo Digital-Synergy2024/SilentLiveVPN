@@ -19,11 +19,6 @@ using static SilentLiveVPN.RasDialWrapper;
 using static SilentLiveVPN.RasDialManager;
 using static SilentLiveVPN.Utilities;
 using static SilentLiveVPN.CreateVPN;
-//using Timer = System.Threading.Timer;
-using static SilentLiveVPN.Tools.ipFecthing;
-using Timer = System.Threading.Timer;
-//using Timer = System.Threading.Timer;
-
 namespace SilentLiveVPN
 { 
 
@@ -31,12 +26,12 @@ namespace SilentLiveVPN
     {
         public static Utilities Tools = new Utilities();
         public static CreateVPN createVPN = new CreateVPN();
-        public static Tools.GeoLocationChecker Geo = new Tools.GeoLocationChecker();
         Variables variables = new Variables();
         OpenVPNConnector OpenVPN = new OpenVPNConnector();
         
         public static ContextMenuStrip menu = new ContextMenuStrip { AutoClose = false };
 
+        /*Note to self: WinForms doesn't like static labels will cause UI issues updating after pressing VPN connect button*/
         public static ListBox listBoxOutPut;
         public static RadioButton RadioButtonVPN1;
         public static RadioButton RadioButtonVPN2;
@@ -47,8 +42,7 @@ namespace SilentLiveVPN
         public static Label labelGeoA;
         public static Label labelGeoB;
         public  Silent()
-        {
-            
+        {         
             InitializeComponent();
             Sunisoft.IrisSkin.SkinEngine skin = new Sunisoft.IrisSkin.SkinEngine();
             skin.SkinAllForm = true;
@@ -72,14 +66,13 @@ namespace SilentLiveVPN
             lblBytesSent.Enabled = false;
             WifiName.Enabled = false;
             lblBytesReceived.Enabled = false;
-            Tools.InitializeTimer(chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5);
+            Tools.InitializeTimer(chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5, labelGeo, label9);
             CreateLineChart();
             OpenVPNConnector.LoanConfig(label4);
             listBoxOutPut = listBox2;
-            //RadioButtonVPN1 = radioButton1;
-            //RadioButtonVPN2 = radioButton2;
-            //RadioButtonVPN3 = radioButton3;
-
+            RadioButtonVPN1 = radioButton1;
+            RadioButtonVPN2 = radioButton2;
+            RadioButtonVPN3 = radioButton3;
             OpenVPNlblA = OpenVPNlbl;
             SoftlblA = softlbl;
             RadiallblA = radiallbl;
@@ -88,9 +81,16 @@ namespace SilentLiveVPN
             radioButton1.CheckedChanged += RadioButton_CheckedChanged;
             radioButton2.CheckedChanged += RadioButton_CheckedChanged;
             radioButton3.CheckedChanged += RadioButton_CheckedChanged;
-            radioButton1.Checked = true;
-            RunOnThread();
+        }
 
+        private void UpdateLabel(Label label, bool status) {
+            if (label.IsHandleCreated)
+            {
+                label.Invoke((MethodInvoker) delegate {
+                    label.Text = status ? "Enabled" : "Disabled";
+                    label.ForeColor = status ? Color.FromArgb(28, 168, 25) : Color.FromArgb(255, 0, 0);
+                });
+            }
         }
 
         private async void RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -98,122 +98,50 @@ namespace SilentLiveVPN
             RadioButton radioButton = sender as RadioButton;
             if (radioButton != null && radioButton.Checked)
             {
-                //_ = StopChecking();
-                //_ = StartChecking();
                 
+                // Check if RadioButtonVPN1 (OpenVPN) is selected
                 if (radioButton1.Checked)
                 {
-                    if (Tools.OpenVPN) {
 
-                        Tools.OpenVPN = false;
-                    
-                    } else {
-
-                        Tools.OpenVPN = true;
-                    }
-
+                    ToggleOpenVPN();
+                    // Disable other VPNs
+                    Utilities.Variables.Rasdial = false;
+                    Utilities.Variables.SoftEther = false;
+                    UpdateLabel(radiallbl, Utilities.Variables.Rasdial);
+                    UpdateLabel(softlbl, Utilities.Variables.SoftEther);
                 }
-                else if (radioButton2.Checked) {
-
-
-                    if (Tools.Rasdial)
-                    {
-
-                        Tools.Rasdial = false;
-
-                    }
-                    else
-                    {
-
-                        Tools.Rasdial = true;
-                    }
+                // Similar checks for other radio buttons...
+                else if (radioButton2.Checked)
+                {
+                    ToggleOpenVPN();
+                    // Disable other VPNs
+                    Utilities.Variables.OpenVPN = false;
+                    Utilities.Variables.SoftEther = false;
+                    UpdateLabel(OpenVPNlbl, Utilities.Variables.OpenVPN);
+                    UpdateLabel(softlbl, Utilities.Variables.SoftEther);
                 }
-                else if (radioButton3.Checked) {
-
-
-                    if (Tools.SoftEther)
-                    {
-
-                        Tools.SoftEther = false;
-
-                    }
-                    else
-                    {
-
-                        Tools.SoftEther = true;
-                    }
-
+                else if (radioButton3.Checked)
+                {
+                    ToggleOpenVPN();
+                    // Disable other VPNs
+                    Utilities.Variables.Rasdial = false;
+                    Utilities.Variables.OpenVPN = false;
+                    UpdateLabel(radiallbl, Utilities.Variables.Rasdial);
+                    UpdateLabel(OpenVPNlbl, Utilities.Variables.OpenVPN);
                 }
             }
         }
 
-        public static async Task<bool> IsUserConnectedToVpnAsync()
+        private void ToggleOpenVPN()
         {
-            string publicIp = await IpFetcher.GetPublicIpAsync();
-            if (publicIp == null) return false;
+            Utilities.Variables.OpenVPN = !Utilities.Variables.OpenVPN; // Toggle the boolean value
+            UpdateLabel(OpenVPNlbl, Utilities.Variables.OpenVPN);
 
-            Silent instance = new Silent();
-            bool isVpn = VpnChecker.IsVpnIp(publicIp);
+            Utilities.Variables.Rasdial = !Utilities.Variables.Rasdial; // Toggle the boolean value
+            UpdateLabel(radiallbl, Utilities.Variables.Rasdial);
 
-            if (isVpn)
-            {
-                string geoInfo = await GeoLocationService.GetGeoLocationAsync(publicIp);
-                var geoData = JObject.Parse(geoInfo);
-                string filePath = "geodata.json";
-                //File.WriteAllText(filePath, string.Empty);
-
-                // Read existing data using StreamReader
-                JArray existingData;
-                if (File.Exists(filePath))
-                {
-                    using (StreamReader reader = new StreamReader(filePath))
-                    {
-                        string existingJson = await reader.ReadToEndAsync();
-
-                        // Check if the JSON is an array or an object
-                        if (existingJson.Trim().StartsWith("["))
-                        {
-                            existingData = JArray.Parse(existingJson);
-                        }
-                        else if (existingJson.Trim().StartsWith("{"))
-                        {
-                            // If it's an object, you can convert it to an array or handle it accordingly
-                            JObject existingObject = JObject.Parse(existingJson);
-                            existingData = new JArray(existingObject);
-                        }
-                        else
-                        {
-                            throw new JsonReaderException("Invalid JSON format in geodata.json");
-                        }
-                    }
-                }
-                else
-                {
-                    existingData = new JArray();
-                }
-
-
-                // Append new geoData
-                existingData.Add(geoData);
-
-                // Write back to the file
-                using (StreamWriter file = new StreamWriter(filePath, false)) // 'false' to overwrite the file
-                {
-                    string updatedJson = JsonConvert.SerializeObject(existingData, Formatting.Indented);
-                    await file.WriteAsync(updatedJson);
-                }
-
-                return true; // User is connected to a VPN
-            }
-
-            return false; // User is not connected to a VPN
-        }
-
-
-        public async void RunOnThread()
-        {
-            //_ = Task.Run(async () => await Geo.StartIt());
-            await Geo.StartIt();
+            Utilities.Variables.SoftEther = !Utilities.Variables.SoftEther; // Toggle the boolean value
+            UpdateLabel(softlbl, Utilities.Variables.SoftEther);
         }
 
         private void MyForm_Resize(object sender, EventArgs e)
@@ -232,7 +160,7 @@ namespace SilentLiveVPN
         public async void Option1_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 1 click
-            if (Tools.OpenVPN)
+            if (Utilities.Variables.OpenVPN)
             {
                 await OpenVPN.AppendTextToOutput("Connecting...", listBox2);
                 await Tools.GetExternalIpAsync(label1);
@@ -240,7 +168,7 @@ namespace SilentLiveVPN
                 await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
                 //Tools.OpenVPN = false;
             }
-            else if (Tools.Rasdial)
+            else if (Utilities.Variables.Rasdial)
             {
                 await OpenVPN.AppendTextToOutput("Connecting...", listBox2);
                 Tools.LoadAuthList(label3, label5);
@@ -249,7 +177,7 @@ namespace SilentLiveVPN
                 await Tools.CallUpdateContextMenuAsync();
                 //Tools.Rasdial = false;
             }
-            else if (Tools.SoftEther)
+            else if (Utilities.Variables.SoftEther)
             {
 
                 Tools.LoadAuthList(label3, label5);
@@ -263,7 +191,7 @@ namespace SilentLiveVPN
         public async void Option2_ClickAsync(object sender, EventArgs e)
         {
             // Handle Option 2 click
-            if (Tools.OpenVPN)
+            if (Utilities.Variables.OpenVPN)
             {
                 await Tools.TerminateProcess(variables.ProcessName);
                 //label1.Text = "No Connection";
@@ -271,14 +199,14 @@ namespace SilentLiveVPN
                 await Tools.CallUpdateContextMenuAsync();
                 //OpenVPN = false;
             }
-            else if (Tools.Rasdial)
+            else if (Utilities.Variables.Rasdial)
             {
                 await RasDialManager.DisconnectFromRas(listBox2);
                 await Tools.GetExternalIpAsync(label1);
                 await Tools.CallUpdateContextMenuAsync();
                 //Rasdial = false;
             }
-            else if (Tools.SoftEther)
+            else if (Utilities.Variables.SoftEther)
             {
                 Tools.LoadAuthList(label3, label5);
                 await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
@@ -303,7 +231,7 @@ namespace SilentLiveVPN
         {
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(label1.Text, null, Option3_Click);
+            menu.Items.Add(Tools.ExternalIP, null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
         }
 
@@ -311,10 +239,9 @@ namespace SilentLiveVPN
         {
             // Clear existing items and re-add them to reflect the updated label text
             menu.Items.Clear();
-            _ = Tools.GetExternalIpAsync(label1);
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(label1.Text, null, Option3_Click);
+            menu.Items.Add(Tools.ExternalIP, null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
             notifyIcon1.Text = label1.Text;
         }
@@ -340,11 +267,10 @@ namespace SilentLiveVPN
             chart1.Series.Add(new Series("Bytes Sent") { ChartType = SeriesChartType.Line });
             chart1.Series.Add(new Series("Bytes Received") { ChartType = SeriesChartType.Line });
             chart1.Titles.Add("VPN Connection Speed");
+            chart1.ChartAreas[0].BackColor = Color.Black;
         }
 
-
-        public async void button1_ClickAsync(object sender, EventArgs e)
-        {
+        public async void button1_ClickAsync(object sender, EventArgs e) {            
             await Tools.Connect(listBox1, label1, label2, label3, label5, listBox2, radioButton1, radioButton2, radioButton3);
         }
 
