@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using Timer = System.Windows.Forms.Timer;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace SilentLiveVPN
 {
@@ -24,10 +25,12 @@ namespace SilentLiveVPN
         public static bool isConnected = false;
  
         public string ExternalIP = "";
+        public static bool instancethere = true;
+        public static PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
 
-        // Assuming these boolean variables are defined at the class level
-
-
+        private PerformanceCounter bytesSentCounter;
+        private PerformanceCounter bytesReceivedCounter;
+        private string instance;
         public class Variables
         {
             public Timer updateTimer;
@@ -77,7 +80,6 @@ namespace SilentLiveVPN
                 set { counter = value; }
             }
 
-
         }
 
         private Variables variables;
@@ -96,46 +98,82 @@ namespace SilentLiveVPN
         }
 
 
-        public void InitializeTimer(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5, Label labelGeo, Label label9)
+        public async Task InitializeTimerAsync(Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5, RichTextBox richTextBoxGeo)
         {
 
-            /*GeoData*/
-            variables.updateGeoData.Interval = 30000; // Update 
-            variables.updateGeoData.Tick += async (sender, e) => await UpdateGeoDataTimer_TickAsync(sender, e, labelGeo, label9);
+            InitializePerformanceCounters();
+
+            // GeoData Timer
+            variables.updateGeoData.Interval = 90000; // Update every 90 seconds
+            variables.updateGeoData.Tick += async (sender, e) =>
+            {
+                try
+                {
+                    await UpdateGeoDataTimer_TickAsync(sender, e, richTextBoxGeo, label1);
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions (e.g., log them)
+                    //Console.WriteLine($"Error in GeoData Timer: {ex.Message}");
+                }
+            };
             variables.updateGeoData.Start();
 
-            variables.updateTimer.Interval = 5000; // Update every second
-            variables.updateTimer.Tick += async (sender, e) => await UpdateTimer_TickAsync(sender, e, chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5);
+            // General Timer
+            variables.updateTimer.Interval = 5000; // Update every 5 seconds
+            variables.updateTimer.Tick += async (sender, e) =>
+            {
+                try
+                {
+                    await UpdateTimer_TickAsync(sender, e, chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5);
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions (e.g., log them)
+                    //Console.WriteLine($"Error in General Timer: {ex.Message}");
+                }
+            };
             variables.updateTimer.Start();
         }
 
-        public void UpdateUI(string latitude, string longitude, string country, string city, string state, Label labelGeo, Label label9)
-        {
-            if (labelGeo.IsHandleCreated)
-            {
-                labelGeo.Invoke((MethodInvoker)async delegate {
-                    labelGeo.Text = $"GeoLocation: {latitude} / {longitude}";
-                    labelGeo.ForeColor = Color.FromArgb(255, 0, 0);
-                });
-            }
 
-            if (label9.IsHandleCreated)
+        public void UpdateUI(string latitude, string longitude, string country, string city, string state, RichTextBox richTextBoxGeo)
+        {
+
+            if (richTextBoxGeo.IsHandleCreated)
             {
-                label9.Invoke((MethodInvoker)async delegate {
-                    label9.Text = $"Country: {country} / City: {city} / ST: {state}";
-                    label9.ForeColor = Color.FromArgb(255, 0, 0);
+                richTextBoxGeo.Invoke((MethodInvoker)async delegate {
+                    richTextBoxGeo.Clear(); // Clear previous text
+
+                    // Set the first part of the text to red
+                    richTextBoxGeo.SelectionColor = Color.White;
+                    richTextBoxGeo.AppendText($"GeoLocation: ");
+
+                    // Set the second part of the text to blue
+                    richTextBoxGeo.SelectionColor = Color.Red;
+                    richTextBoxGeo.AppendText($"{latitude} / {longitude}");
+
+                    richTextBoxGeo.SelectionColor = Color.White;
+                    richTextBoxGeo.AppendText($"\nLocation: ");
+
+                    // Set the second part of the text to blue
+                    richTextBoxGeo.SelectionColor = Color.Red;
+                    richTextBoxGeo.AppendText($"Country: {country} / City: {city} / ST: {state}");
+
+                    // Reset selection color to default
+                    richTextBoxGeo.SelectionColor = richTextBoxGeo.ForeColor;
                 });
             }
 
         }
 
         private const string GeoPluginUrl = "http://www.geoplugin.net/json.gp?ip=";
-        public async void ReadGeoDataAsync(Label labelGeo, Label label9)
+        public async Task ReadGeoDataAsync(RichTextBox richTextBoxGeo)
         {
+
             try
             {
-                string externalIp = await GetExternalIpAddressAsync();
-                string requestUrl = $"{GeoPluginUrl}{externalIp}";
+                string requestUrl = $"{GeoPluginUrl}{ExternalIP}";
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -153,41 +191,89 @@ namespace SilentLiveVPN
                     string state = readGeoData["geoplugin_regionCode"]?.ToString() ?? "N/A";
 
                     // Update UI elements safely
-                    UpdateUI(latitude, longitude, country, city, state, labelGeo, label9);
+                    UpdateUI(latitude, longitude, country, city, state, richTextBoxGeo);
                 }
             }
             catch (HttpRequestException httpEx)
-            {
-                MessageBox.Show($"Error retrieving geo-location data: {httpEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (JsonException jsonEx)
-            {
-                MessageBox.Show($"Error parsing geo-location data: {jsonEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {                
+                //await connector.AppendTextToOutput($"Error retrieving geo-location data: {httpEx.Message}", Silent.listBoxOutPut);
+                if (richTextBoxGeo.IsHandleCreated)
+                {
+                    richTextBoxGeo.Invoke((MethodInvoker)async delegate {
+                        richTextBoxGeo.Clear(); // Clear previous text
+
+                        // Set the first part of the text to red
+                        richTextBoxGeo.SelectionColor = Color.White;
+                        richTextBoxGeo.AppendText($"Error Trying to Get GeoLocation: {httpEx.Message}" );
+
+                        // Reset selection color to default
+                        richTextBoxGeo.SelectionColor = richTextBoxGeo.ForeColor;
+                    });
+                }
             }
         }
 
+        public async Task UpdateGeoDataTimer_TickAsync(object sender, EventArgs e, RichTextBox richTextBoxGeo, Label label1) {
 
-        public async Task UpdateGeoDataTimer_TickAsync(object sender, EventArgs e, Label labelGeo, Label label9) {
+            await ReadGeoDataAsync(richTextBoxGeo);
+            await CallUpdateContextMenuAsync();
+            await GetExternalIpAsync(label1);
+        }
 
-            ReadGeoDataAsync(labelGeo, label9);
+        public void InitializePerformanceCounters()
+        {
+            instance = GetNetworkInstance();
+
+            if (!string.IsNullOrEmpty(instance))
+            {
+                bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
+                bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
+            }
+            else
+            {
+                // Handle the case where no instance is found
+                throw new InvalidOperationException("No valid network instance found.");
+            }
+        }
+
+        private string GetNetworkInstance()
+        {
+            string[] instances = performanceCounterCategory.GetInstanceNames();
+            return instances.Length > 0 ? instances[0] : string.Empty; // Return the first instance or empty
         }
 
         public async Task UpdateTimer_TickAsync(object sender, EventArgs e, Chart chart1, Label lblBytesSent, Label lblBytesReceived, Label WifiName, Label label1, Label label3, Label label5)
         {
-            PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
-            bool instancethere = true;
-            string instance2 = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[0] : string.Empty;
-            string instance = performanceCounterCategory.GetInstanceNames().Length > 0 ? performanceCounterCategory.GetInstanceNames()[1] : string.Empty;
-            if (string.IsNullOrEmpty(instance))
+            if (bytesSentCounter == null || bytesReceivedCounter == null)
             {
-                WifiName.Text = "No Network Interface Found";
+                
+                WifiName.BeginInvoke((MethodInvoker)delegate { WifiName.Text = "Performance counters not initialized."; });
                 return;
             }
 
+            // Update UI with network adapter information
+            UpdateNetworkAdapterInfo(WifiName);
+
+            for (int i = 0; i < 10; ++i)
+            {
+                float bytesSent = bytesSentCounter.NextValue();
+                float bytesReceived = bytesReceivedCounter.NextValue();
+
+                lblBytesSent.BeginInvoke((MethodInvoker)async delegate { lblBytesSent.Text = $"Bytes Sent: {bytesSent / 1024} KB"; });
+                lblBytesReceived.BeginInvoke((MethodInvoker)async delegate { lblBytesReceived.Text = $"Bytes Received: {bytesReceived / 1024} KB"; });
+                chart1.BeginInvoke((MethodInvoker)async delegate {
+                    chart1.Series["Bytes Sent"].Points.AddXY(i, bytesSent / 1024);
+                    chart1.Series["Bytes Received"].Points.AddXY(i, bytesReceived / 1024);
+                });
+
+                await Task.Delay(100); // Optional delay to prevent UI freezing
+            }
+
+            LoadAuthList(label3, label5);
+        }
+
+        private void UpdateNetworkAdapterInfo(Label WifiName)
+        {
             string ethernetAdapterName = string.Empty;
             string wifiAdapterName = string.Empty;
 
@@ -196,7 +282,6 @@ namespace SilentLiveVPN
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet && adapter.OperationalStatus == OperationalStatus.Up)
                 {
                     ethernetAdapterName = adapter.Name;
-                    instancethere = false;
                 }
                 else if (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && adapter.OperationalStatus == OperationalStatus.Up)
                 {
@@ -204,58 +289,132 @@ namespace SilentLiveVPN
                 }
             }
 
-            WifiName.Text = !string.IsNullOrEmpty(ethernetAdapterName) ? $"Ethernet Adapter Name: {ethernetAdapterName}" :
-                            !string.IsNullOrEmpty(wifiAdapterName) ? $"WiFi Adapter Name: {wifiAdapterName}" :
-                            "No Active Network Adapters";
+            WifiName.BeginInvoke((MethodInvoker)async delegate {
+                WifiName.Text = !string.IsNullOrEmpty(ethernetAdapterName) ? $"Ethernet Adapter Name: {ethernetAdapterName}" :
+                !string.IsNullOrEmpty(wifiAdapterName) ? $"WiFi Adapter Name: {wifiAdapterName}" :
+                "No Active Network Adapters";
+            });
 
-            PerformanceCounter bytesSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancethere ? instance : instance2);
-            PerformanceCounter bytesReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancethere ? instance : instance2);
-
-            for (int i = 0; i < 10; ++i)
-            {
-                variables.bytesSent = bytesSentCounter.NextValue();
-                variables.bytesReceived = bytesReceivedCounter.NextValue();
-                lblBytesSent.Text = $"Bytes Sent: {variables.bytesSent / 1024} KB";
-                lblBytesReceived.Text = $"Bytes Received: {variables.bytesReceived / 1024} KB";
-                chart1.Series["Bytes Sent"].Points.AddXY(variables.counter++, variables.bytesSent / 1024);
-                chart1.Series["Bytes Received"].Points.AddXY(variables.counter++, variables.bytesReceived / 1024);
-
-            }
-
-            await GetExternalIpAsync(label1);
-            LoadAuthList(label3, label5);
         }
+        
+        
+        private static readonly HttpClient client = new HttpClient();
 
         public static async Task<string> GetExternalIpAddressAsync()
         {
-            using (HttpClient client = new HttpClient())
+            string primaryApiUrl = "https://api.ipify.org";
+            string secondaryApiUrl = "https://api.myip.com";
+
+            try
             {
+                // Attempt to get the IP address from the primary API
+                string ipAddress = await GetIpAddressFromApi(primaryApiUrl);
+                return ipAddress;
+            }
+            catch (HttpRequestException ex) 
+            {
+                // If we receive a 429 status code, switch to the secondary API
                 try
                 {
-                    // Requesting the external IP from a reliable service
-                    string ipAddress = await client.GetStringAsync("https://api.ipify.org");
+                    string ipAddress = await GetIpAddressFromApi(secondaryApiUrl);
                     return ipAddress;
                 }
-                catch (Exception ex)
+                catch (Exception secondaryEx)
                 {
-                    MessageBox.Show($"An unexpected error occurred For External IP: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return null;
+                    // Log the error from the secondary API
+                    //Console.WriteLine($"Secondary API failed: {secondaryEx.Message}");
+                    string ipAddress = "Error";
+                    return ipAddress;
                 }
+            }
+            catch (Exception ex)
+            {
+                // Log any other unexpected errors
+                //Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                string ipAddress = "Error";
+                return ipAddress;
             }
         }
 
-        public async Task GetExternalIpAsync(Label label1)
+        private static async Task<string> GetIpAddressFromApi(string apiUrl)
         {
-            using (HttpClient client = new HttpClient())
+            // Make the HTTP request to the specified API
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+            // Check if the response is successful
+            if (response.IsSuccessStatusCode)
             {
-                try
+                // Read and return the response content
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                // Throw an exception if the response indicates an error
+                //throw new HttpRequestException($"Error fetching IP address from {apiUrl}. Status code: {response.StatusCode}", null);
+                return null;
+            }
+        }
+
+        public static List<IPAddress> ReadIpAddressesFromFile(string filePath)
+        {
+            List<IPAddress> ipAddresses = new List<IPAddress>();
+
+            try
+            {
+                // Read all lines from the specified file
+                string[] lines = File.ReadAllLines(filePath);
+
+                foreach (string line in lines)
                 {
+                    // Trim whitespace and check if the line is not empty
+                    string trimmedLine = line.Trim();
+                    if (!string.IsNullOrEmpty(trimmedLine))
+                    {
+                        // Validate the IP address
+                        if (IPAddress.TryParse(trimmedLine, out IPAddress ipAddress))
+                        {
+                            ipAddresses.Add(ipAddress);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Invalid IP address found: {trimmedLine}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show($"Error: The file '{filePath}' was not found. {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"Error: Access to the file '{filePath}' is denied. {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return ipAddresses;
+        }
+
+        public async Task GetExternalIpAsync(Label label1) {
+            using (HttpClient client = new HttpClient()) {
+                try {                   
                     ExternalIP = await client.GetStringAsync("http://api.ipify.org");
                     label1.Text = $"Your External IP: {ExternalIP}";
+                    
+                    // Overwrite the file with an empty string
+                    File.WriteAllText("ip.txt", string.Empty);
+
+                    // Save the IP address to the specified text file
+                    using (StreamWriter writer = new StreamWriter("ip.txt", true)) {
+                        
+                        await writer.WriteLineAsync($"{ExternalIP}");
+                    }
 
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     label1.Text = $"Error: {ex.Message}";
                 }
             }
@@ -407,8 +566,6 @@ namespace SilentLiveVPN
             // If you need to perform additional asynchronous operations, you can await them here
             await Task.Delay(100); // Simulating an asynchronous operation
         }
-        //public static Silent silent = new Silent();
-
 
         public async Task Connect(ListBox listBox1, Label label1, Label label2, Label label3, Label label5, ListBox listBox2, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3) {
 
@@ -418,7 +575,7 @@ namespace SilentLiveVPN
                 {
                     await connector.AppendTextToOutput("Connecting...", listBox2);
                     await GetExternalIpAsync(label1);
-                    await CallUpdateContextMenuAsync();
+                    //await CallUpdateContextMenuAsync();
                     await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
                 }
                 else if (Variables.Rasdial)
@@ -427,7 +584,7 @@ namespace SilentLiveVPN
                     LoadAuthList(label3, label5);
                     await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
                     await GetExternalIpAsync(label1);
-                    await CallUpdateContextMenuAsync();
+                    //await CallUpdateContextMenuAsync();
                 }
                 else if (Variables.SoftEther) {
 
@@ -435,7 +592,7 @@ namespace SilentLiveVPN
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
                     await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
                     await GetExternalIpAsync(label1);
-                    await CallUpdateContextMenuAsync();
+                    //await CallUpdateContextMenuAsync();
                 }
                 
             }
@@ -455,13 +612,13 @@ namespace SilentLiveVPN
                     await TerminateProcess(variables.ProcessName);
                     label1.Text = "No Connection";
                     await GetExternalIpAsync(label1);
-                    await CallUpdateContextMenuAsync();
+                    //await CallUpdateContextMenuAsync();
                 }
                 else if (Variables.Rasdial)
                 {
                     await RasDialManager.DisconnectFromRas(listBox2);
                     await GetExternalIpAsync(label1);
-                    await CallUpdateContextMenuAsync();
+                    //await CallUpdateContextMenuAsync();
                 }
                 else if (Variables.SoftEther)
                 {

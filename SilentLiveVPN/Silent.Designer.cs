@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Silent));
             this.button1 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -75,11 +75,10 @@
             this.radiallbl = new System.Windows.Forms.Label();
             this.softlbl = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.labelGeo = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.richTextBoxGeo = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.silentBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -180,21 +179,21 @@
             this.chart1.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.DiagonalRight;
             this.chart1.BorderlineColor = System.Drawing.SystemColors.ControlDark;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.DataSource = this.silentBindingSource;
             this.chart1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.chart1.Enabled = false;
             this.chart1.ImeMode = System.Windows.Forms.ImeMode.Off;
-            legend3.Name = "Legend";
-            this.chart1.Legends.Add(legend3);
+            legend1.Name = "Legend";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(0, 502);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend";
-            series3.Name = "Legend";
-            this.chart1.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend";
+            series1.Name = "Legend";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(1397, 300);
             this.chart1.TabIndex = 9;
             this.chart1.Text = "chart1";
@@ -300,9 +299,9 @@
             // button8
             // 
             this.button8.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.button8.Location = new System.Drawing.Point(217, 108);
+            this.button8.Location = new System.Drawing.Point(-4, 115);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(111, 46);
+            this.button8.Size = new System.Drawing.Size(342, 42);
             this.button8.TabIndex = 20;
             this.button8.Text = "SoftEtherAdpater";
             this.button8.UseVisualStyleBackColor = false;
@@ -605,20 +604,6 @@
             this.label11.TabIndex = 24;
             this.label11.Visible = false;
             // 
-            // labelGeo
-            // 
-            this.labelGeo.AutoSize = true;
-            this.labelGeo.BackColor = System.Drawing.Color.Transparent;
-            this.labelGeo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelGeo.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.labelGeo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.labelGeo.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGeo.Location = new System.Drawing.Point(12, 271);
-            this.labelGeo.Name = "labelGeo";
-            this.labelGeo.Size = new System.Drawing.Size(129, 26);
-            this.labelGeo.TabIndex = 25;
-            this.labelGeo.Text = "GeoLocation";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -658,19 +643,16 @@
             this.label8.TabIndex = 28;
             this.label8.Text = "SoftEther";
             // 
-            // label9
+            // richTextBoxGeo
             // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label9.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.label9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label9.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(12, 297);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(75, 26);
-            this.label9.TabIndex = 29;
-            this.label9.Text = "Region";
+            this.richTextBoxGeo.BackColor = System.Drawing.Color.Black;
+            this.richTextBoxGeo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxGeo.ForeColor = System.Drawing.Color.Transparent;
+            this.richTextBoxGeo.Location = new System.Drawing.Point(12, 274);
+            this.richTextBoxGeo.Name = "richTextBoxGeo";
+            this.richTextBoxGeo.Size = new System.Drawing.Size(358, 96);
+            this.richTextBoxGeo.TabIndex = 30;
+            this.richTextBoxGeo.Text = "";
             // 
             // Silent
             // 
@@ -678,11 +660,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1397, 802);
-            this.Controls.Add(this.label9);
+            this.Controls.Add(this.richTextBoxGeo);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.labelGeo);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.softlbl);
             this.Controls.Add(this.radiallbl);
@@ -762,11 +743,10 @@
         public System.Windows.Forms.Label OpenVPNlbl;
         public System.Windows.Forms.Label radiallbl;
         public System.Windows.Forms.Label softlbl;
-        public System.Windows.Forms.Label labelGeo;
         public System.Windows.Forms.Label label6;
         public System.Windows.Forms.Label label7;
         public System.Windows.Forms.Label label8;
-        public System.Windows.Forms.Label label9;
+        public System.Windows.Forms.RichTextBox richTextBoxGeo;
     }
 }
 

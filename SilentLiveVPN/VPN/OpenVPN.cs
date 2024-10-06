@@ -225,6 +225,15 @@ namespace SilentLiveVPN
 
         }
 
+        public async void StartVpnConnection(string openVpnPath, string authFilePath, ListBox listBox2)
+        {
+            // Run the StartConnection method in a separate thread
+            await Task.Run(async () =>
+            {
+                await StartConnection(openVpnPath, authFilePath, listBox2);
+            });
+        }
+
         public async Task StartConnection(string openVpnPath, string authFilePath, ListBox listBox2)
         {
             try
@@ -421,7 +430,7 @@ namespace SilentLiveVPN
                 string openVpnPath = @"C:\Program Files\OpenVPN\bin\openvpn.exe";
                 string authFileName = "auth.txt";
                 string authFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, authFileName);
-                await vpnConnector.StartConnection(openVpnPath, authFilePath, listBoxA);
+                vpnConnector.StartVpnConnection(openVpnPath, authFilePath, listBoxA);
             }
             catch (Exception ex)
             {

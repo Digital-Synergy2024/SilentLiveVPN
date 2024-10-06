@@ -41,33 +41,42 @@ namespace SilentLiveVPN
         public static Label RadiallblA;
         public static Label labelGeoA;
         public static Label labelGeoB;
-        public  Silent()
-        {         
+        public Silent()
+        {
             InitializeComponent();
+            InitializeEventHandlers();
+            InitializeUIComponents();
+            Tools.InitializeTimerAsync(chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5, richTextBoxGeo).ConfigureAwait(false);
+            InitializeSkin();
+        }
+
+        private void InitializeSkin()
+        {
             Sunisoft.IrisSkin.SkinEngine skin = new Sunisoft.IrisSkin.SkinEngine();
             skin.SkinAllForm = true;
-            // var path = "..\\..\\s\\a (1).ssk";
             skin.SkinFile = Environment.CurrentDirectory + @"\s\a (43).ssk";
-            InitializeContextMenu();
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            //Tools.LoadGiphyImage(pictureBox1);
-            Tools.LoadAuthList(label3, label5);
-            this.Resize += new EventHandler(Form1_Resize);
-            // Initialize event handlers
-            this.Resize += MyForm_Resize; // Subscribe to the Resize event
-            this.FormClosing += new FormClosingEventHandler(Form1_FormClosingAsync);
-            openToolStripMenuItem.Click += new EventHandler(openToolStripMenuItem_Click);
-            exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
-            notifyIcon1.DoubleClick += new EventHandler(notifyIcon1_MouseDoubleClick);
-            notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
+        }
+
+        private void InitializeEventHandlers()
+        {
+            this.Resize += MyForm_Resize;
+            this.FormClosing += Form1_FormClosingAsync;
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+            notifyIcon1.DoubleClick += notifyIcon1_MouseDoubleClick;
+            notifyIcon1.MouseClick += notifyIcon1_MouseClick;
             notifyIcon1.Visible = false; // Hide the icon from the system tray
+        }
+
+        private void InitializeUIComponents()
+        {
             Tools.LoadDataIntoListBox(listBox1);
             chart1.Enabled = false;
             lblBytesSent.Enabled = false;
             WifiName.Enabled = false;
             lblBytesReceived.Enabled = false;
-            Tools.InitializeTimer(chart1, lblBytesSent, lblBytesReceived, WifiName, label1, label3, label5, labelGeo, label9);
             CreateLineChart();
+            InitializeContextMenu();
             OpenVPNConnector.LoanConfig(label4);
             listBoxOutPut = listBox2;
             RadioButtonVPN1 = radioButton1;
@@ -76,8 +85,6 @@ namespace SilentLiveVPN
             OpenVPNlblA = OpenVPNlbl;
             SoftlblA = softlbl;
             RadiallblA = radiallbl;
-            labelGeoA = labelGeo;
-            labelGeoB = label9;
             radioButton1.CheckedChanged += RadioButton_CheckedChanged;
             radioButton2.CheckedChanged += RadioButton_CheckedChanged;
             radioButton3.CheckedChanged += RadioButton_CheckedChanged;
@@ -164,9 +171,8 @@ namespace SilentLiveVPN
             {
                 await OpenVPN.AppendTextToOutput("Connecting...", listBox2);
                 await Tools.GetExternalIpAsync(label1);
-                await Tools.CallUpdateContextMenuAsync();
+                //await Tools.CallUpdateContextMenuAsync();
                 await OpenVPNConnector.ConnecttoOpenVPN(listBox2, label2);
-                //Tools.OpenVPN = false;
             }
             else if (Utilities.Variables.Rasdial)
             {
@@ -174,8 +180,7 @@ namespace SilentLiveVPN
                 Tools.LoadAuthList(label3, label5);
                 await RasDialManager.ConnectToRasVPN("Silent_VPN", label3.Text, label5.Text, listBox2);
                 await Tools.GetExternalIpAsync(label1);
-                await Tools.CallUpdateContextMenuAsync();
-                //Tools.Rasdial = false;
+                //await Tools.CallUpdateContextMenuAsync();
             }
             else if (Utilities.Variables.SoftEther)
             {
@@ -183,7 +188,6 @@ namespace SilentLiveVPN
                 Tools.LoadAuthList(label3, label5);
                 await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountRetrySet {label3.Text} /NUM:0 /INTERVAL:5", "", listBox2);
                 await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountConnect  {label3.Text}", "", listBox2);
-                //Tools.SoftEther = false;
             }
             menu.Close();
         }
@@ -196,21 +200,18 @@ namespace SilentLiveVPN
                 await Tools.TerminateProcess(variables.ProcessName);
                 //label1.Text = "No Connection";
                 await Tools.GetExternalIpAsync(label1);
-                await Tools.CallUpdateContextMenuAsync();
-                //OpenVPN = false;
+                //await Tools.CallUpdateContextMenuAsync();
             }
             else if (Utilities.Variables.Rasdial)
             {
                 await RasDialManager.DisconnectFromRas(listBox2);
                 await Tools.GetExternalIpAsync(label1);
-                await Tools.CallUpdateContextMenuAsync();
-                //Rasdial = false;
+                //await Tools.CallUpdateContextMenuAsync();
             }
             else if (Utilities.Variables.SoftEther)
             {
                 Tools.LoadAuthList(label3, label5);
                 await shell.SendCmd($"vpncmd", $"/CLIENT 127.0.0.1 /CMD AccountDisconnect {label3.Text}", "", listBox2);
-                //SoftEther = true;
             }
             menu.Close();
         }
@@ -229,21 +230,25 @@ namespace SilentLiveVPN
 
         private void InitializeContextMenu()
         {
+            string path = "ip.txt";
+            List<IPAddress> externalIp = ReadIpAddressesFromFile(path);
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(Tools.ExternalIP, null, Option3_Click);
+            menu.Items.Add(externalIp[0].ToString(), null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
         }
 
-        public void UpdateContextMenu()
+        public async void UpdateContextMenu()
         {
             // Clear existing items and re-add them to reflect the updated label text
             menu.Items.Clear();
+            string path = "ip.txt";
+            List<IPAddress> externalIp = ReadIpAddressesFromFile(path);
             menu.Items.Add("Connect", null, Option1_ClickAsync);
             menu.Items.Add("Disconnect", null, Option2_ClickAsync);
-            menu.Items.Add(Tools.ExternalIP, null, Option3_Click);
+            menu.Items.Add(externalIp[0].ToString(), null, Option3_Click);
             menu.Items.Add("Close SilentVpn", null, Option4_Click);
-            notifyIcon1.Text = label1.Text;
+            notifyIcon1.Text = externalIp[0].ToString();
         }
 
         public void removeConectMenuItem() {
@@ -356,7 +361,6 @@ namespace SilentLiveVPN
             }
         }
 
-
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -405,6 +409,7 @@ namespace SilentLiveVPN
             await Tools.SaveUserInputToFileAsync(textBox1.Text, textBox2.Text);
             Tools.LoadAuthList(label3, label5);
         }
+
         //statistics 
         private async void button6_ClickAsync(object sender, EventArgs e)
         {
@@ -414,13 +419,12 @@ namespace SilentLiveVPN
             label1.Visible = !label1.Visible;
             label2.Visible = !label2.Visible;
             label4.Visible = !label4.Visible;
-            lblBytesSent.Enabled = true;
-            WifiName.Enabled = true;
-            lblBytesReceived.Enabled = true;
-            label4.Enabled = true;
-            label1.Enabled = true;
-            label2.Enabled = true;
-            await Tools.GetExternalIpAsync(label1);
+            lblBytesSent.Enabled = !lblBytesSent.Enabled;
+            WifiName.Enabled = !WifiName.Enabled;
+            lblBytesReceived.Enabled = !lblBytesReceived.Enabled;
+            label4.Enabled = !label4.Enabled;
+            label1.Enabled = !label1.Enabled;
+            label2.Enabled = !label2.Enabled;
         }
 
         //graph
@@ -433,7 +437,6 @@ namespace SilentLiveVPN
         private async void button3_Click_1(object sender, EventArgs e)
         {
             bool isTaken = createVPN.IsVpnNameTaken(variables.VpnNameToCheck);
-            //ReadGeoData();
             if (isTaken)
             {
                 MessageBox.Show($"The VPN is already setup.");
@@ -570,7 +573,7 @@ namespace SilentLiveVPN
                 $"/CLIENT 127.0.0.1 /CMD AccountCreate {label3.Text} /SERVER:vpn.silentlive.net:443 /HUB:silent /USERNAME:{label3.Text} /NICNAME:VPN2",
                 $"/CLIENT 127.0.0.1 /CMD AccountPasswordSet {label3.Text} /PASSWORD:{label5.Text} /TYPE:Standard"
             };
-            await OpenVPN.AppendTextToOutput($"Cmd: {commands.ToString()}", listBox2);
+            await OpenVPN.AppendTextToOutput($"Cmd: {commands}", listBox2);
             await shell.SendCmd("vpncmd", commands[0], " ", listBox2);
             await shell.SendCmd("vpncmd", commands[1], " ", listBox2);
             await shell.SendCmd("vpncmd", commands[2], " ", listBox2);
